@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import TableHead from './components/TableHead';
+import Table from './components/Table';
 
 function App() {
 
-  return(<TableHead/>)
+  return(<Table/>)
 
 }
 

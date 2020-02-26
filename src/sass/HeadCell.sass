@@ -1,15 +1,62 @@
+$border: 2px ridge #3C3A49
+
 .node
-    border: 1px solid red
+    border: $border
+    border-right: none
+    display: flex
+    flex-direction: column
+    &__subnode
+        border-bottom: none
+        &--vertical
+            border: none
+            border-top: $border
+            padding-left: 5px
+            flex-direction: row
+            &:first-child
+                border-top: none
+    &__container
+        &--vertical
+            width: 100px
+        // padding-left: 5px
+        &--horizontal
+            padding-left: 5px
+            // padding-right: 5px
+    &--horizontal
+        
+    &--vertical
+        border:
+            left: none
+            // right: $border
+            top: none
+            bottom: $border
+        padding-left: 5px
+        flex-direction: row
     &__wrapper
         display: flex
-    &__subnode
+        flex-grow: 1
+        &--vertical
+            flex-direction: column
+            // margin-left: 5px
+            border:
+                left: $border
+                // top: $border
+                
+            // color: yellow
+    &:first-child:not(&--vertical)
+        border-left: none
+    
+    &__closed
+        // border-bottom: none
     &__open-btn
         display: inline-block
 
-        border: 1px solid #000
+        border: 1px solid #2B2A35
         text-align: center
         width: 20px
         height: 20px
         cursor: pointer
     &__text
         display: inline-block
+        margin-left: 5px
+        margin-right: 5px
+        // width: 80px

@@ -1,0 +1,55 @@
+$border: 2px ridge #3C3A49
+%head-side
+    display: flex
+    width: max-content
+    background-color: #cdccd6
+    border-right: $border//2px ridge #3C3A49
+// border: 1px solid blue
+
+.cell
+    &-width
+        width: 120px
+    &-height
+        height: 60px
+    
+.head
+    margin-left: 10px
+    max-width: 1200px
+    max-height: 500px
+    overflow: scroll
+    &__horizontal
+        @extend %head-side
+        position: sticky
+        top: 0
+        // border-right: $border
+        // width: max-content
+    &__vertical
+        // min-width: 114px
+        @extend %head-side
+        border-left: $border//2px ridge #3C3A49
+        flex-direction: column
+        position: sticky
+        left: 0
+        // box-sizing: border-box
+        // .node:first-child
+        //     border-top: none
+    &__content-wrapper
+        display: flex
+        width: max-content
+        // overflow: scroll
+
+    //     display: flex
+    //     width: max-content
+    //     background-color: #cdccd6
+    // // border: 1px solid blue
+    //     border-right: 2px ridge #3C3A49
+    
+
+.emptyBlock
+
+    // box-sizing: border-box
+    z-index: 20
+    position: relative
+    border-top: $border//2px ridge #3C3A49
+    border-left: $border//2px ridge #3C3A49
+    border-bottom: $border//2px ridge #3C3A49

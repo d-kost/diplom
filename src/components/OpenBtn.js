@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
-class OpenBtn extends Component{
+class OpenBtn extends PureComponent{
     render() {
         return(
             <div className="node__open-btn"
