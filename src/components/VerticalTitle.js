@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import HeadCell from './HeadCell'
+import PropTypes from 'prop-types'
 
 export default class VerticalTitle extends Component {
     constructor(props) {
@@ -33,4 +34,9 @@ export default class VerticalTitle extends Component {
             </div>
         )
     }
+}
+
+VerticalTitle.propTypes = {
+    v_nodes: PropTypes.arrayOf(PropTypes.object),
+    addNodeToVerticalNodes: PropTypes.func
 }

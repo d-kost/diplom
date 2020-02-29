@@ -1,4 +1,5 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from "react"
+import PropTypes from 'prop-types'
 
 class OpenBtn extends PureComponent{
     render() {
@@ -7,6 +8,11 @@ class OpenBtn extends PureComponent{
             onClick={this.props.openClickHandler}>{this.props.openSign}</div>
         )
     }
+}
+
+OpenBtn.propTypes = {
+    openSign: PropTypes.string,
+    openClickHandler: PropTypes.func
 }
 
 export default OpenBtn;

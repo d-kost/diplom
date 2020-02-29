@@ -1,4 +1,5 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from "react"
+import PropTypes from 'prop-types'
 
 export default class FieldCell extends PureComponent {
 
@@ -10,4 +11,9 @@ export default class FieldCell extends PureComponent {
             
         )
     }
+}
+
+FieldCell.propTypes = {
+    vNode: PropTypes.string,
+    hNode: PropTypes.string
 }

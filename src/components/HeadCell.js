@@ -1,6 +1,7 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from "react"
 import '../sass/HeadCell.sass'
-import OpenBtn from "./OpenBtn";
+import OpenBtn from "./OpenBtn"
+import PropTypes from 'prop-types'
 
 class HeadCell extends PureComponent{
     constructor(props){
@@ -48,39 +49,55 @@ class HeadCell extends PureComponent{
 
     }
 
+    generateNodeClass() {
+        const nodeClass = ["node"];
+        if (this.state.isSubnode) nodeClass.push("node__subnode");
+        if (this.state.isSubnode && this.state.isVertical) nodeClass.push("node__subnode--vertical");
+        if (!this.state.isSubnode && this.state.isVertical) nodeClass.push("node--vertical");
+
+        if (!this.state.isOpened && !this.state.isVertical) nodeClass.push("cell-width");
+        if (!this.state.isOpened && this.state.isVertical) nodeClass.push("cell-height");
+
+        return nodeClass;
+    }
+
+    generateClass(sourceClass) {
+        const resultClass = [sourceClass];
+        if (this.state.isVertical) {
+            resultClass.push(`${sourceClass}--vertical`);
+        } else {
+            resultClass.push(`${sourceClass}--horizontal`);
+        }
+        return resultClass;
+    }
+
     render(){
         // console.log(this.state.node.text);
         const openSign = this.state.isOpened ? "-" : "+";
-        let nodeClass = this.state.isSubnode ? "node node__subnode" : "node";
-        nodeClass += this.state.isSubnode&&this.state.isVertical ? " node__subnode--vertical" : "";
-        nodeClass += !this.state.isSubnode&&this.state.isVertical ? " node--vertical" : "";
-        
-        let wrapperClass = "node__wrapper";
-        wrapperClass += this.state.isVertical ? " node__wrapper--vertical" : " node__wrapper--horizontal";
-        let node_container = "node__container";
-        node_container += this.state.isVertical ? " node__container--vertical" : " node__container--horizontal";
 
-        nodeClass += !this.state.isOpened&&!this.state.isVertical ? " cell-width" : "";
-        nodeClass += !this.state.isOpened&&this.state.isVertical ? " cell-height" : "";
-        
+        const nodeClass = this.generateNodeClass();
+        const wrapperClass = this.generateClass("node__wrapper");
+        const node_container = this.generateClass("node__container");
+    
         const hasChildren = this.state.node.children && this.state.node.children.length > 0;
   
 
         return(
-            <div className={nodeClass} data-cell={this.state.node.text}>
-                <div className={node_container}>
-                {hasChildren &&
-                <OpenBtn
-                    openSign={openSign}
-                    openClickHandler={this.openClickHandler}
-                /> }
-                
-                <p className="node__text">{this.state.node.text}</p>
+            <div className={nodeClass.join(' ')} data-cell={this.state.node.text}>
+                <div className={node_container.join(' ')}>
+                    {hasChildren &&
+                    <OpenBtn
+                        openSign={openSign}
+                        openClickHandler={this.openClickHandler}
+                    /> }
+                    
+                    <p className="node__text">{this.state.node.text}</p>
                 </div>
 
                 {/* {hasChildren && this.pushNode(this.state.node.text)} */}
 
-                {this.state.isOpened && hasChildren && <div className={wrapperClass}>
+                {this.state.isOpened && hasChildren &&
+                <div className={wrapperClass.join(' ')}>
                     {this.state.node.children.map(n =>
                     <HeadCell
                     key={n.id}
@@ -97,6 +114,15 @@ class HeadCell extends PureComponent{
         )
     }
 
+}
+
+HeadCell.propTypes = {
+    node: PropTypes.object,
+    isSubnode: PropTypes.bool,
+    isOpened: PropTypes.bool,
+    isVertical: PropTypes.bool,
+    pushNode: PropTypes.func,
+    resizeEmptyBlock: PropTypes.func
 }
 
 export default HeadCell;

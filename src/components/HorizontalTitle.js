@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import HeadCell from './HeadCell'
+import PropTypes from 'prop-types'
 
 export default class HorizontalTitle extends Component {
     
@@ -15,3 +16,8 @@ export default class HorizontalTitle extends Component {
         )
     }
 }
+
+HorizontalTitle.propTypes = {
+    h_nodes: PropTypes.arrayOf(PropTypes.object),
+    addNodeToHorizontalNodes: PropTypes.func
+};

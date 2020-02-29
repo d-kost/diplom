@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import FieldCell from "./FieldCell";
+import React, { Component } from "react"
+import FieldCell from "./FieldCell"
 import '../sass/Field.sass'
+import PropTypes from 'prop-types'
 
 class Field extends Component {
     render() {
@@ -14,11 +15,15 @@ class Field extends Component {
                 </div>)
                 
             })}             
-                {/* {this.props.horizontalNodes.map( n =><FieldCell /> )} */}
             </div>
         )
     }
 
+}
+
+Field.propTypes = {
+    verticalNodes: PropTypes.arrayOf(PropTypes.string),
+    horizontalNodes: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default Field;
