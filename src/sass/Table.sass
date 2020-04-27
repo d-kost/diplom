@@ -1,10 +1,16 @@
 $border: 2px ridge #3C3A49
+
 %head-side
     display: flex
     width: max-content
     background-color: #cdccd6
-    border-right: $border//2px ridge #3C3A49
-// border: 1px solid blue
+    border-right: $border
+
+.kek
+    display: flex
+    position: sticky
+    top: 0
+    z-index: 10
 
 .cell
     &-width
@@ -15,41 +21,38 @@ $border: 2px ridge #3C3A49
 .head
     margin-left: 10px
     max-width: 1200px
-    max-height: 500px
+    // max-height: 500px
+    max-height: 300px
     overflow: scroll
     &__horizontal
         @extend %head-side
-        position: sticky
-        top: 0
-        // border-right: $border
-        // width: max-content
+        // position: sticky
+        // top: 0
+        // z-index: 10
     &__vertical
-        // min-width: 114px
         @extend %head-side
-        border-left: $border//2px ridge #3C3A49
+        border-left: $border
         flex-direction: column
         position: sticky
         left: 0
-        // box-sizing: border-box
-        // .node:first-child
-        //     border-top: none
+        z-index: 5
+
     &__content-wrapper
         display: flex
         width: max-content
-        // overflow: scroll
 
-    //     display: flex
-    //     width: max-content
-    //     background-color: #cdccd6
-    // // border: 1px solid blue
-    //     border-right: 2px ridge #3C3A49
     
+// .horizontal-wrapper
+//     @extend %head-side
+//     z-index: 5
 
 .emptyBlock
 
+    background-color: blue
     // box-sizing: border-box
-    z-index: 20
-    position: relative
-    border-top: $border//2px ridge #3C3A49
-    border-left: $border//2px ridge #3C3A49
-    border-bottom: $border//2px ridge #3C3A49
+    z-index: 200
+    position: sticky
+    left: 0
+    border-top: $border
+    border-left: $border
+    border-bottom: $border

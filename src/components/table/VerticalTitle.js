@@ -3,21 +3,21 @@ import HeadCell from './HeadCell'
 import PropTypes from 'prop-types'
 
 export default class VerticalTitle extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.resizeEmptyBlock = this.resizeEmptyBlock.bind(this);
-    }
+    this.resizeEmptyBlock = this.resizeEmptyBlock.bind(this);
+  }
 
-    resizeEmptyBlock() {
+  resizeEmptyBlock() {
         // console.log("ADSGF");        
-        let verticalWidth = document.querySelector('.head__vertical').clientWidth;
-        let emptyBlock = document.querySelector('.emptyBlock');
+    let verticalWidth = document.querySelector('.head__vertical').clientWidth;
+    let emptyBlock = document.querySelector('.emptyBlock');
         
-        if (verticalWidth !== emptyBlock.clientWidth) {
-            emptyBlock.style.width = verticalWidth + 'px';
-        }
+    if (verticalWidth !== emptyBlock.clientWidth) {
+      emptyBlock.style.minWidth = verticalWidth + 'px';
     }
+  }
 
     componentDidMount() {
         this.resizeEmptyBlock();

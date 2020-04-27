@@ -1,0 +1,39 @@
+$border: 2px solid #737373
+
+.measure-selection
+    display: flex
+    margin: 0 50px
+    width: max-content
+    border: $border
+    border-radius: 5px
+    
+    &__title
+        border-bottom: $border
+    &__panel
+        width: 400px
+        border-right: $border
+        &:last-child
+            border-right: none
+        
+
+.selection-list
+    display: flex
+    flex-direction: column
+    overflow-y: scroll
+    height: 200px
+    &__ul
+        list-style: none
+        padding: 0 40px
+        flex-grow: 1
+    &__dimension
+        display: flex
+        justify-content: space-between
+        margin-bottom: 5px
+        padding: 10px
+        border: $border
+        border-radius: 5px
+    &__title
+        margin: 0
+    &__button
+        border-radius: 50%
+        // height: 20%
