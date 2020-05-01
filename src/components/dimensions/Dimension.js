@@ -5,7 +5,8 @@ import { Draggable } from 'react-beautiful-dnd';
 const Dimension = React.memo(function Dimension(props) {
 
   return (
-    <Draggable draggableId={props.id.toString()} index={props.index}>
+    <Draggable draggableId={props.dimension.id.toString()} index={props.index}>
+
       {provided => (
         <li
           {...provided.draggableProps}
@@ -13,22 +14,26 @@ const Dimension = React.memo(function Dimension(props) {
           ref={provided.innerRef}
           className="selection-list__dimension"
         >
-          {/* {console.log('render li', props.id)} */}
-          <p className='selection-list__title'>{props.name}</p>
+
+          {/* {console.log('render li', props.dimensionValue)} */}
+          <p className='selection-list__title'>
+            {props.dimension.RName}  {props.dimensionValue
+              && props.dimensionValue.map(value => value ? value.ID : '')}
+          </p>
+          
           <button
-            onClick={() => props.onOpenModal(props.id)}
+            onClick={() => props.onOpenModal(props.dimension.Abbr)}
             className='selection-list__button'
           >
             Open
           </button>
-          
+
         </li>
       )}
-      
+
     </Draggable>
 
   )
-
 });
 
 

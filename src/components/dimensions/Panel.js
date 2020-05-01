@@ -25,10 +25,10 @@ const Panel = (props) => {
                   {props.dimensions.map((dim, index) => (
                     <Dimension
                       key={dim.id}
-                      id={dim.id}
-                      name={dim.RName}
+                      dimension={dim}
                       index={index}
-                      onOpenModal={props.onOpenModal}                      
+                      onOpenModal={props.onOpenModal}
+                      dimensionValue={props.dimensionValues[dim.Abbr]}
                     >
                     </Dimension>
                   ))}

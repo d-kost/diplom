@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import DimensionsTreeNode from './DimensionsTreeNode';
+import IndicatorsTreeNode from './IndicatorsTreeNode';
 
 
-const DimensionsTree = (props) => {
+const IndicatorsTree = (props) => {
 
   const [isOpened, setIsOpened] = useState(false);
 
@@ -12,20 +12,21 @@ const DimensionsTree = (props) => {
 
   return (
     <div>
-      {/* {console.log('dimension tree render')} */}
-      <DimensionsTreeNode
+      {/* {console.log('indicator tree render')} */}
+      <IndicatorsTreeNode
         node={props.node}
         onSwitchClick={onSwitchClick}
         isOpened={isOpened}
+        onNodeDownClick={props.onNodeDownClick}
       />
 
-      <div className={isOpened ? 'modal-tree--opened' : 'modal-tree--closed'}>
-
-        {props.node.Children &&
+      <div className='modal-tree__children'>
+        {isOpened && props.node.Children &&
           props.node.Children.map(subnode => {
-            return (<DimensionsTree
+            return (<IndicatorsTree
               key={subnode.ID}
               node={subnode}
+              onNodeDownClick={props.onNodeDownClick}
             />)
           })
         }
@@ -36,4 +37,5 @@ const DimensionsTree = (props) => {
   )
 }
 
-export default DimensionsTree;
+
+export default React.memo(IndicatorsTree);

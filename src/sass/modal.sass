@@ -16,29 +16,50 @@
         width: 70%
         height: 90%
         padding: 20px
-        // text-align: center
         box-shadow: 0 5px 10px 2px rgba(195,192,192,.5)
+
 
     &-tree
         width: 90%
-        height: 70%
+        height: 60%
         overflow-y: scroll
         overflow-x: scroll
         &__node
-            padding: 10px 0
             border-bottom: 1px solid grey
+            display: flex
+            flex-direction: row
+            &:hover
+                background-color: #cccccc
         &__switch
+            padding: 10px
+        &__name
+            padding: 10px
             cursor: pointer
-            padding-right: 10px
-        &--opened
-            display: block
-            padding-left: 20px
-        &--closed
-            display: none
+            flex-grow: 1
+        &__button-down
+            padding: 4px 10px
+            font-size: 24px
+        &__children
+            padding-left: 42px
 
 
     &-list
         width: 90%
         border: 1px solid #000
-        height: 20%
+        height: 30%
         min-height: 20%
+        overflow-y: scroll
+        &__item
+            list-style: none
+            display: flex
+            flex-direction: row
+            justify-content: space-between
+        &__name
+            margin: 0
+        &__delete-btn
+            cursor: pointer
+
+.tree-button
+    cursor: pointer
+    &:hover
+        background-color: #a5a5a5

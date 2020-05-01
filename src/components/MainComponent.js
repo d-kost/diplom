@@ -1,16 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // import Table from './table/Table';
-import ModalPortal from './modal/ModalPortal';
-import SelectionBox from './modal/SelectionBox';
-import MeasureSelectionField from './measure/MeasureSelectionField';
-import { useState } from 'react';
-
+import DimensionSelection from './dimensions/DimensionSelection';
 
 function MainComponent() {
 
   const [dimensions, setDimensions] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [modalTree, setModalTree] = useState();
+
 
   useEffect(() => {
     fetch('http://localhost:8080/dims')
@@ -18,43 +13,53 @@ function MainComponent() {
       .then(json => setDimensions(json))
   }, [])
 
-  const onOpenModal = (id) => {
-    console.log(id);
-    let dimension = dimensions.filter(dimension => dimension.id === id)[0];
 
-    const query = `http://localhost:8080/dim?abbr=${dimension.Abbr}`;
-    console.log(query);
+  const onApplyClick = (singleValues, leftHeader, topHeader, values) => {
+    let hdr = [];
 
-    fetch(query)
-      .then(response => response.json())
-      .then(json => {
-        setModalTree(json)
-        setShowModal(true);
-      })
-      
+    hdr.push(...createQueryHeader(leftHeader));
+    hdr.push(...createQueryHeader(topHeader));
 
+    let params = createQueryParams(values);
+
+    let query = `http://localhost:8080/vals?hdr=${hdr}${params}`;
+
+    console.log('query', query);
   }
 
-  const onModalCancelClick = () => {
-    setShowModal(false);
+
+  const createQueryHeader = (header) => {
+    return header.map(dimension => dimension.Abbr);
   }
+
+  const createQueryParams = (values) => {
+    let params = '';
+
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        params += `&${key}=`;
+
+        if (values[key] != null) {
+          params += values[key].map(value => value ? value.ID : '').join(',');
+        }
+
+      }
+    }
+    return params;
+  }
+
+
 
   return (
     <div>
-      {dimensions.length && 
-        <MeasureSelectionField
+      {dimensions.length &&
+        <DimensionSelection
           dimensions={dimensions}
-          onOpenModal={onOpenModal}
+          onApplyClick={onApplyClick}
         />
       }
 
-      {showModal && <ModalPortal>
-          <SelectionBox
-            tree={modalTree}
-            onCancelClick={onModalCancelClick}
-          />
-      </ModalPortal>}
-        
+
       {/* <Table/> */}
     </div>
   )
