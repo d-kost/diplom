@@ -1,16 +1,16 @@
-import React, { PureComponent } from "react"
-import PropTypes from 'prop-types'
+import React, { PureComponent } from "react";
+import PropTypes from 'prop-types';
 
 export default class FieldCell extends PureComponent {
 
   render() {
-    return(
+    return (
       <div className="field__cell cell-width cell-height"
         data-cell-col={this.props.hNode}
         data-cell-row={this.props.vNode}
       >
         {this.props.vNode + " " + this.props.hNode}</div>
-            
+
     )
   }
 }

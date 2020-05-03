@@ -1,14 +1,14 @@
-import React, { Component } from "react"
-import FieldCell from "./FieldCell"
-import '../../sass/Field.sass'
-import PropTypes from 'prop-types'
+import React, { Component } from "react";
+import FieldCell from "./FieldCell";
+import '../../sass/Field.sass';
+import PropTypes from 'prop-types';
 
 class Field extends Component {
   render() {
-    return(
-      <div className="field">   
+    return (
+      <div className="field">
         {this.props.verticalNodes.map(v_node => {
-          return(
+          return (
             <div className="field__row" key={v_node}>
               {this.props.horizontalNodes.map(h_node =>
                 <FieldCell
@@ -19,8 +19,8 @@ class Field extends Component {
                 />
               )}
             </div>)
-                
-        })}             
+
+        })}
       </div>
     )
   }

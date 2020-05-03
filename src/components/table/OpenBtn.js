@@ -1,18 +1,18 @@
-import React, { PureComponent } from "react"
-import PropTypes from 'prop-types'
+import React from "react";
+import PropTypes from 'prop-types';
 
-class OpenBtn extends PureComponent{
-    render() {
-        return(
-            <div className="node__open-btn"
-            onClick={this.props.openClickHandler}>{this.props.openSign}</div>
-        )
-    }
+const OpenBtn = (props) => {
+
+  return (
+    <div className="node__open-btn"
+      onClick={props.openClickHandler}>{props.openSign}</div>
+  )
+
 }
 
 OpenBtn.propTypes = {
-    openSign: PropTypes.string,
-    openClickHandler: PropTypes.func
+  openSign: PropTypes.string,
+  openClickHandler: PropTypes.func
 }
 
-export default OpenBtn;
+export default React.memo(OpenBtn);

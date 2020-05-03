@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 // import testData from '../test-data.json';
-import testDataH from '../../json/horizontal.json';
-import testDataV from '../../json/vertical.json';
+// import testDataH from '../../json/horizontal.json';
+// import testDataV from '../../json/vertical.json';
 import '../../sass/Table.sass';
-import HorizontalTitle from './HorizontalTitle';
-import VerticalTitle from './VerticalTitle';
-import Field from './Field';
+import TopHeader from './TopHeader';
+// import LeftHeader from './LeftHeader';
+// import Field from './Field';
+import PropTypes from 'prop-types';
 
-class TableHead extends Component {
+class DataTable extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      h_nodes: testDataH,
-      v_nodes: testDataV,
+      // tNodes: testDataH,
+      // v_nodes: testDataV,
       horizontalNodes: [],
       verticalNodes: []
     }
@@ -93,24 +94,33 @@ class TableHead extends Component {
     return (
       <div className="head">
 
+        <div className='horizontal-wrapper'>
+          <div className="emptyBlock">empty</div>
+          <TopHeader
+            tNodes={this.props.tNodes}
+            headerValues={this.props.headerValues}
+            addNodeToHorizontalNodes={this.addNodeToHorizontalNodes}
+          />
+        </div>
 
-        <div className='kek'>
+
+        {/* <div className='horizontal-wrapper'>
           <div className="emptyBlock">empty</div>
           <HorizontalTitle
-            h_nodes={this.state.h_nodes}
+            tNodes={this.state.h_nodes}
             addNodeToHorizontalNodes={this.addNodeToHorizontalNodes} 
           />
         </div>
 
 
         <div className="head__content-wrapper">
-          <VerticalTitle v_nodes={this.state.v_nodes}
+          <LeftHeader v_nodes={this.state.v_nodes}
             addNodeToVerticalNodes={this.addNodeToVerticalNodes}
           />
 
           <Field horizontalNodes={this.state.horizontalNodes}
             verticalNodes={this.state.verticalNodes} />
-        </div>
+        </div> */}
 
 
         {/* {console.log("h", this.state.horizontalNodes)}
@@ -123,4 +133,10 @@ class TableHead extends Component {
 
 }
 
-export default TableHead;
+DataTable.propTypes = {
+  tNodes: PropTypes.arrayOf(PropTypes.object),
+  lNodes: PropTypes.arrayOf(PropTypes.object),
+  headerValues: PropTypes.object
+}
+
+export default DataTable;

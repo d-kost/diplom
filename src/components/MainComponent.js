@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-// import Table from './table/Table';
+import DataTable from './table/DataTable';
 import DimensionSelection from './dimensions/DimensionSelection';
 
 function MainComponent() {
 
   const [dimensions, setDimensions] = useState([]);
+  const [leftHeader, setLeftHeader] = useState([]);
+  const [topHeader, setTopHeader] = useState([]);
+  const [headerValues, setHeaderValues] = useState({});
 
 
   useEffect(() => {
@@ -14,21 +17,26 @@ function MainComponent() {
   }, [])
 
 
-  const onApplyClick = (singleValues, leftHeader, topHeader, values) => {
+  const onApplyClick = (singleValues, leftH, topH, values) => {
     let hdr = [];
 
-    hdr.push(...createQueryHeader(leftHeader));
-    hdr.push(...createQueryHeader(topHeader));
+    hdr.push(...createQueryHdr(leftH));
+    hdr.push(...createQueryHdr(topH));
 
     let params = createQueryParams(values);
 
     let query = `http://localhost:8080/vals?hdr=${hdr}${params}`;
 
     console.log('query', query);
+    console.log('topH', topH);
+    console.log('values', values);
+    setLeftHeader(leftH);
+    setTopHeader(topH);
+    setHeaderValues(values)
   }
 
 
-  const createQueryHeader = (header) => {
+  const createQueryHdr = (header) => {
     return header.map(dimension => dimension.Abbr);
   }
 
@@ -59,8 +67,11 @@ function MainComponent() {
         />
       }
 
-
-      {/* <Table/> */}
+      <DataTable
+        tNodes={topHeader}
+        lNodes={leftHeader}
+        headerValues={headerValues}
+      />
     </div>
   )
 }
