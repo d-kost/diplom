@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 // import testDataV from '../../json/vertical.json';
 import '../../sass/Table.sass';
 import TopHeader from './TopHeader';
-// import LeftHeader from './LeftHeader';
+import LeftHeader from './LeftHeader';
 // import Field from './Field';
 import PropTypes from 'prop-types';
 
@@ -17,11 +17,13 @@ class DataTable extends Component {
       // tNodes: testDataH,
       // v_nodes: testDataV,
       horizontalNodes: [],
-      verticalNodes: []
+      verticalNodes: [],
+      topHeaderList: []
     }
 
     this.addNodeToHorizontalNodes = this.addNodeToHorizontalNodes.bind(this);
     this.addNodeToVerticalNodes = this.addNodeToVerticalNodes.bind(this);
+    this.setupTopHeaderList = this.setupTopHeaderList.bind(this);
 
   }
 
@@ -89,18 +91,43 @@ class DataTable extends Component {
     })
   }
 
+  setupTopHeaderList(newElement) {
+    this.setState(prevState => {
+      return { topHeaderList: [...prevState.topHeaderList, newElement] }
+    })
+  }
+
+  setupLeftHeaderList(newElement) {
+    // this.setState(prevState => {
+    //   return { topHeaderList: [...prevState.topHeaderList, newElement] }
+    // })
+  }
+
+
 
   render() {
     return (
       <div className="head">
 
+        {console.log('topHeaderList', this.state.topHeaderList)}
         <div className='horizontal-wrapper'>
           <div className="emptyBlock">empty</div>
           <TopHeader
             tNodes={this.props.tNodes}
             headerValues={this.props.headerValues}
-            addNodeToHorizontalNodes={this.addNodeToHorizontalNodes}
+            setupTopHeaderList={this.setupTopHeaderList}
           />
+        </div>
+
+        <div className="head__content-wrapper">
+          <LeftHeader
+            lNodes={this.props.lNodes}
+            headerValues={this.props.headerValues}
+            setupLeftHeaderList={this.setupLeftHeaderList}
+          />
+
+          {/* <Field horizontalNodes={this.state.horizontalNodes}
+            verticalNodes={this.state.verticalNodes} /> */}
         </div>
 
 

@@ -25,7 +25,7 @@ class HeadCell extends PureComponent {
   }
 
   pushNode = (node) => {
-    this.props.pushNode(node, this.state.wasClosed)
+    this.props.pushNode(node);
   }
 
   componentDidUpdate() {
@@ -34,9 +34,9 @@ class HeadCell extends PureComponent {
     //   this.pushNode(this.state.node.text); 
     // }
 
-    // if (this.state.isVertical) {
-    //   this.props.resizeEmptyBlock();
-    // }
+    if (this.props.isVertical) {
+      this.props.resizeEmptyBlock();
+    }
 
   }
 
@@ -44,6 +44,36 @@ class HeadCell extends PureComponent {
     // if (!this.state.isOpened) { //this.state.isVertical || 
     //   this.pushNode(this.state.node.text); 
     // }
+
+    if (!this.props.isVertical &&
+      !this.state.isOpened) {
+
+      if (!this.props.tNodes[this.props.index]) {
+        //если компонент является конечным во всем заголовке
+        this.props.pushNode(this.state.node);
+
+      } else {
+        //если компонент является конечным только на своём уровне
+        this.prop.pushNode(this.state.node);
+      }
+    }
+
+
+
+    // this.props.pushNode(this.state.node);
+
+
+    // if (!this.props.isVertical &&
+    //   !this.state.isOpened &&
+    //   this.props.tNodes[this.props.index]) {
+    //     //если компонент является конечным только на своём уровне
+    //     this.pushNode(this.state.node);
+    //     // this.props.pushNode(this.state.node);
+    // }
+
+    if (this.props.isVertical) {
+      this.props.resizeEmptyBlock();
+    }
 
   }
 
@@ -54,7 +84,7 @@ class HeadCell extends PureComponent {
     if (!this.props.isSubnode && this.props.isVertical) nodeClass.push("node--vertical");
 
     // if (!this.state.isOpened && !this.props.isVertical) nodeClass.push("cell-width");
-    if (!this.state.isOpened && this.props.isVertical) nodeClass.push("cell-height");
+    // if (!this.state.isOpened && this.props.isVertical) nodeClass.push("cell-height");
 
 
     if (!this.props.isVertical &&
@@ -62,6 +92,13 @@ class HeadCell extends PureComponent {
       !this.props.tNodes[this.props.index]) {
 
       nodeClass.push("cell-width");
+    }
+
+    if (this.props.isVertical &&
+      !this.state.isOpened &&
+      !this.props.tNodes[this.props.index]) {
+
+      nodeClass.push("cell-height");
     }
 
 
@@ -103,13 +140,21 @@ class HeadCell extends PureComponent {
               openClickHandler={this.openClickHandler}
             />}
 
-          <p className="node__text">{this.state.node.Name}</p>
+          {console.log('render head cell')}
+          <p
+            className="node__text"
+            title={this.state.node.Name}
+          >
+            {this.state.node.Name}
+          </p>
         </div>
 
-        <div className={wrapperClass.join(' ')}>
+        {/* <div className={wrapperClass.join(' ')}> */}
 
-          {this.state.isOpened && hasChildren &&
-            this.state.node.Children.map(n =>
+        {this.state.isOpened && hasChildren &&
+          <div className={wrapperClass.join(' ')}>
+
+            {this.state.node.Children.map(n =>
 
               <HeadCell
                 key={n.ID}
@@ -122,13 +167,16 @@ class HeadCell extends PureComponent {
                 tNodes={this.props.tNodes}
                 headerValues={this.props.headerValues}
                 resizeEmptyBlock={this.props.resizeEmptyBlock}
-              />)
+              />)}
+          </div>
 
-          }
+        }
 
-          {(!this.state.isOpened || !hasChildren) &&
-            this.props.tNodes[this.props.index] &&
-            this.props.headerValues[this.props.tNodes[this.props.index].Abbr].map(value =>
+        {(!this.state.isOpened || !hasChildren) &&
+          this.props.tNodes[this.props.index] &&
+          <div className={wrapperClass.join(' ')}>
+
+            {this.props.headerValues[this.props.tNodes[this.props.index].Abbr].map(value =>
 
               <HeadCell
                 key={value.ID}
@@ -139,13 +187,15 @@ class HeadCell extends PureComponent {
                 index={this.props.index + 1}
                 tNodes={this.props.tNodes}
                 headerValues={this.props.headerValues}
-                pushNode={this.props.addNodeToHorizontalNodes}
-              />)
+                pushNode={this.props.pushNode}
+                resizeEmptyBlock={this.props.resizeEmptyBlock}
+              />)}
+          </div>
 
-          }
+        }
 
-        </div>
       </div>
+      // </div >
     )
   }
 
@@ -156,6 +206,9 @@ HeadCell.propTypes = {
   isSubnode: PropTypes.bool,
   isOpened: PropTypes.bool,
   isVertical: PropTypes.bool,
+  index: PropTypes.number,
+  tNodes: PropTypes.arrayOf(PropTypes.object),
+  headerValues: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
   pushNode: PropTypes.func,
   resizeEmptyBlock: PropTypes.func
 }

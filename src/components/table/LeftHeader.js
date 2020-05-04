@@ -10,7 +10,7 @@ export default class LeftHeader extends Component {
   }
 
   resizeEmptyBlock() {
-    // console.log("ADSGF");        
+    // ref?????        
     let verticalWidth = document.querySelector('.head__vertical').clientWidth;
     let emptyBlock = document.querySelector('.emptyBlock');
 
@@ -20,23 +20,47 @@ export default class LeftHeader extends Component {
   }
 
   componentDidMount() {
-    this.resizeEmptyBlock();
+    // this.resizeEmptyBlock();
   }
 
   render() {
     return (
       <div className="head__vertical">
-        {this.props.v_nodes.map(n => <HeadCell
-          key={n.id} node={n} isSubnode={false} isOpened={true}
-          isVertical={true} pushNode={this.props.addNodeToVerticalNodes}
+        {console.log('this.props.lNodes', this.props.lNodes)}
+
+        {this.props.lNodes[0] &&
+          this.props.headerValues[this.props.lNodes[0].Abbr].map(value =>
+            <HeadCell
+              key={value.ID}
+              node={value}
+              isSubnode={false}
+              isOpened={true}
+              isVertical={true}
+              index={1}
+              tNodes={this.props.lNodes}
+              headerValues={this.props.headerValues}
+              pushNode={this.props.setupLeftHeaderList}
+              resizeEmptyBlock={this.resizeEmptyBlock}
+            />
+          )}
+        {/* {this.props.lNodes.map(n => <HeadCell
+          key={n.id}
+          node={n}
+          isSubnode={false}
+          isOpened={true}
+          isVertical={true}
+          index={1}
+          tNodes={this.props.lNodes}
+          headerValues={this.props.headerValues}
+          pushNode={this.props.addNodeToVerticalNodes}
           resizeEmptyBlock={this.resizeEmptyBlock}
-        />)}
+        />)} */}
       </div>
     )
   }
 }
 
 LeftHeader.propTypes = {
-  v_nodes: PropTypes.arrayOf(PropTypes.object),
-  addNodeToVerticalNodes: PropTypes.func
+  lNodes: PropTypes.arrayOf(PropTypes.object),
+  setupLeftHeaderList: PropTypes.func
 }
