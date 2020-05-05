@@ -7,9 +7,11 @@ class HeadCell extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      node: props.node,
+      node: props.node, //не нужен
       isOpened: props.isOpened,
       wasClosed: false,
+      isEndNode: !this.props.isOpened && !this.props.tNodes[this.props.index],
+      isLevelEndNode: !this.props.isOpened && this.props.tNodes[this.props.index],
     }
 
     this.openClickHandler = this.openClickHandler.bind(this);
@@ -19,14 +21,17 @@ class HeadCell extends PureComponent {
     this.setState(prevState => {
       return {
         isOpened: !prevState.isOpened,
-        wasClosed: prevState.isOpened ? true : false
+        wasClosed: prevState.isOpened ? true : false,
+
+        isEndNode: prevState.isOpened && !this.props.tNodes[this.props.index],
+        isLevelEndNode: prevState.isOpened && this.props.tNodes[this.props.index],
       }
     })
   }
 
-  pushNode = (node) => {
-    this.props.pushNode(node);
-  }
+  // pushNode = (node) => {
+  //   this.props.pushNode(node);
+  // }
 
   componentDidUpdate() {
 
@@ -45,31 +50,41 @@ class HeadCell extends PureComponent {
     //   this.pushNode(this.state.node.text); 
     // }
 
-    if (!this.props.isVertical &&
-      !this.state.isOpened) {
+    // if (!this.props.isVertical &&
+    //   !this.state.isOpened) {
 
-      if (!this.props.tNodes[this.props.index]) {
-        //если компонент является конечным во всем заголовке
-        this.props.pushNode(this.state.node);
+    //   if (!this.props.tNodes[this.props.index]) {
+    //     //если компонент является конечным во всем заголовке
+    //     this.props.pushNode(this.state.node);
+    //     console.log('history', this.props.history);
 
-      } else {
-        //если компонент является конечным только на своём уровне
-        this.prop.pushNode(this.state.node);
-      }
+
+    //   } else {
+    //     //если компонент является конечным только на своём уровне
+    //     this.prop.pushNode(this.state.node);
+
+    //   }
+    // }
+
+    if (this.state.isEndNode) {
+      //если компонент является конечным во всем заголовке
+      let history = JSON.parse(JSON.stringify(this.props.history));
+      history.endNodes.push(this.state.node.ID);
+      this.props.pushNode(history);
+
+
+      // console.log('history', this.props.history);
+      // console.log('isEndNode', this.state.node.Name + ' ' + this.state.node.ID);
+
     }
-
-
+    if (this.state.isLevelEndNode) {
+      //если компонент является конечным только на своём уровне
+      // this.props.pushNode(this.state.node);
+      // console.log('isLevelEndNode', this.state.node.Name + ' ' + this.state.node.ID);
+    }
 
     // this.props.pushNode(this.state.node);
 
-
-    // if (!this.props.isVertical &&
-    //   !this.state.isOpened &&
-    //   this.props.tNodes[this.props.index]) {
-    //     //если компонент является конечным только на своём уровне
-    //     this.pushNode(this.state.node);
-    //     // this.props.pushNode(this.state.node);
-    // }
 
     if (this.props.isVertical) {
       this.props.resizeEmptyBlock();
@@ -88,15 +103,13 @@ class HeadCell extends PureComponent {
 
 
     if (!this.props.isVertical &&
-      !this.state.isOpened &&
-      !this.props.tNodes[this.props.index]) {
+      this.state.isEndNode) {
 
       nodeClass.push("cell-width");
     }
 
     if (this.props.isVertical &&
-      !this.state.isOpened &&
-      !this.props.tNodes[this.props.index]) {
+      this.state.isEndNode) {
 
       nodeClass.push("cell-height");
     }
@@ -117,6 +130,23 @@ class HeadCell extends PureComponent {
   }
 
 
+  getNewHistory(id) {
+    let history = {};
+    history.nodePath = [...this.props.history.nodePath, id];
+
+    let endNodes = this.props.history.endNodes.slice();
+    if (this.state.isLevelEndNode) {
+      endNodes[this.props.index - 1] = this.state.node.ID;
+    }
+    history.endNodes = endNodes;
+
+    // history.endNodes = this.state.isLevelEndNode ?
+    //   [...this.props.history.endNodes, this.state.node.ID] : [...this.props.history.endNodes];
+
+    return history;
+  }
+
+
   render() {
     const openSign = this.state.isOpened ? "-" : "+";
 
@@ -132,7 +162,10 @@ class HeadCell extends PureComponent {
         className={nodeClass.join(' ')}
         data-cell={this.state.node.text}
       >
-        <div className={node_container.join(' ')}>
+        <div
+          className={node_container.join(' ')}
+          title={this.state.node.Name}
+        >
 
           {hasChildren &&
             <OpenBtn
@@ -141,15 +174,13 @@ class HeadCell extends PureComponent {
             />}
 
           {console.log('render head cell')}
-          <p
-            className="node__text"
-            title={this.state.node.Name}
-          >
-            {this.state.node.Name}
+          <p className="node__text">
+            {this.state.node.ID} {this.state.node.Name}
           </p>
         </div>
 
-        {/* <div className={wrapperClass.join(' ')}> */}
+
+        {/* {console.log('this.props.index', this.props.index + ' ' + this.state.node.Name)} */}
 
         {this.state.isOpened && hasChildren &&
           <div className={wrapperClass.join(' ')}>
@@ -163,13 +194,15 @@ class HeadCell extends PureComponent {
                 isOpened={false}
                 isVertical={this.props.isVertical}
                 pushNode={this.props.pushNode}
+                history={this.getNewHistory(n.ID)}
                 index={this.props.index}
                 tNodes={this.props.tNodes}
                 headerValues={this.props.headerValues}
                 resizeEmptyBlock={this.props.resizeEmptyBlock}
-              />)}
-          </div>
+              />)
 
+            }
+          </div>
         }
 
         {(!this.state.isOpened || !hasChildren) &&
@@ -184,6 +217,7 @@ class HeadCell extends PureComponent {
                 isSubnode={false}
                 isOpened={false}
                 isVertical={this.props.isVertical}
+                history={this.getNewHistory(value.ID)}
                 index={this.props.index + 1}
                 tNodes={this.props.tNodes}
                 headerValues={this.props.headerValues}
@@ -195,7 +229,6 @@ class HeadCell extends PureComponent {
         }
 
       </div>
-      // </div >
     )
   }
 
@@ -206,6 +239,9 @@ HeadCell.propTypes = {
   isSubnode: PropTypes.bool,
   isOpened: PropTypes.bool,
   isVertical: PropTypes.bool,
+  history: PropTypes.objectOf(
+    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.arrayOf(PropTypes.number)),
   index: PropTypes.number,
   tNodes: PropTypes.arrayOf(PropTypes.object),
   headerValues: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),

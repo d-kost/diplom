@@ -120,11 +120,11 @@ class DataTable extends Component {
         </div>
 
         <div className="head__content-wrapper">
-          <LeftHeader
+          {/* <LeftHeader
             lNodes={this.props.lNodes}
             headerValues={this.props.headerValues}
             setupLeftHeaderList={this.setupLeftHeaderList}
-          />
+          /> */}
 
           {/* <Field horizontalNodes={this.state.horizontalNodes}
             verticalNodes={this.state.verticalNodes} /> */}
