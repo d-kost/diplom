@@ -67,11 +67,12 @@ function MainComponent() {
         />
       }
 
-      <DataTable
-        tNodes={topHeader}
-        lNodes={leftHeader}
-        headerValues={headerValues}
-      />
+      {topHeader.length && leftHeader.length &&
+        <DataTable
+          tNodes={topHeader}
+          lNodes={leftHeader}
+          headerValues={headerValues}
+        />}
     </div>
   )
 }

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 // import testDataV from '../../json/vertical.json';
 import '../../sass/Table.sass';
 import TopHeader from './TopHeader';
-import LeftHeader from './LeftHeader';
+// import LeftHeader from './LeftHeader';
 // import Field from './Field';
 import PropTypes from 'prop-types';
 
@@ -14,8 +14,6 @@ class DataTable extends Component {
     super(props);
 
     this.state = {
-      // tNodes: testDataH,
-      // v_nodes: testDataV,
       horizontalNodes: [],
       verticalNodes: [],
       topHeaderList: []
@@ -91,10 +89,13 @@ class DataTable extends Component {
     })
   }
 
-  setupTopHeaderList(newElement) {
-    this.setState(prevState => {
-      return { topHeaderList: [...prevState.topHeaderList, newElement] }
+  setupTopHeaderList(newHeader) {
+    this.setState({
+     topHeaderList: newHeader
     })
+    // this.setState(prevState => {
+    //   return { topHeaderList: [...prevState.topHeaderList, newElement] }
+    // })
   }
 
   setupLeftHeaderList(newElement) {
