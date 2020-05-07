@@ -7,31 +7,21 @@ $border: 2px ridge #3C3A49
     border-right: $border
     border-bottom: $border
 
-.horizontal-wrapper
-    display: flex
-    position: sticky
-    top: 0
-    z-index: 10
-
-.cell
-    &-width
-        width: 130px
-    &-height
-        height: 60px
     
-.head
+.data-table
     font-size: 14px
     margin-left: 10px
     max-width: 1200px
     // max-height: 500px
-    max-height: 300px
+    max-height: 700px
     overflow: scroll
-    &__horizontal
+    &__top-header
         @extend %head-side
+        border-top: $border
         // position: sticky
         // top: 0
         // z-index: 10
-    &__vertical
+    &__left-header
         @extend %head-side
         border-left: $border
         flex-direction: column
@@ -43,19 +33,22 @@ $border: 2px ridge #3C3A49
         display: flex
         width: max-content
 
-    
-// .horizontal-wrapper
-//     @extend %head-side
-//     z-index: 5
+    &__top-header-wrapper
+        display: flex
+        position: sticky
+        top: 0
+        z-index: 10
 
-.emptyBlock
+.cell
+    &-width
+        width: 130px
+    &-height
+        height: 60px
 
+
+.empty-block
     background-color: blue
-    // box-sizing: border-box
     z-index: 200
     position: sticky
     left: 0
     border: $border
-    // border-top: $border
-    // border-left: $border
-    // border-bottom: $border

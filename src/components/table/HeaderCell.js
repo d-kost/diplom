@@ -29,10 +29,8 @@ class HeaderCell extends PureComponent {
 
 
   generateNodeClass() {
-    const nodeClass = ["node"];
-    if (this.props.isSubnode) nodeClass.push("node__subnode");
-    if (this.props.isSubnode && this.props.isVertical) nodeClass.push("node__subnode--vertical");
-    if (!this.props.isSubnode && this.props.isVertical) nodeClass.push("node--vertical");
+    const nodeClass = [];
+    nodeClass.push(...this.generateClass("node"));
 
     if (!this.props.isVertical &&
       !this.props.node.isOpened &&
@@ -56,20 +54,19 @@ class HeaderCell extends PureComponent {
   generateClass(sourceClass) {
     const resultClass = [sourceClass];
     if (this.props.isVertical) {
-      resultClass.push(`${sourceClass}--vertical`);
+      resultClass.push(`${sourceClass}--left`);
     } else {
-      resultClass.push(`${sourceClass}--horizontal`);
+      resultClass.push(`${sourceClass}--top`);
     }
     return resultClass;
   }
 
 
-  getHeaderCellComponent(subnode, isSubnode) {
+  getHeaderCellComponent(subnode) {
     return (
       <HeaderCell
         key={subnode.ID}
         node={subnode}
-        isSubnode={isSubnode}
         isVertical={this.props.isVertical}
         headerTree={this.props.headerTree}
         openBtnClick={this.props.openBtnClick}
@@ -133,7 +130,6 @@ class HeaderCell extends PureComponent {
 
 HeaderCell.propTypes = {
   node: PropTypes.object,
-  isSubnode: PropTypes.bool,
   isVertical: PropTypes.bool,
   openBtnClick: PropTypes.func,
   resizeEmptyBlock: PropTypes.func //only for vertical

@@ -9,23 +9,22 @@ export default class LeftHeader extends Component {
     this.resizeEmptyBlock = this.resizeEmptyBlock.bind(this);
   }
 
+
   resizeEmptyBlock() {
     // ref?????        
-    let verticalWidth = document.querySelector('.head__vertical').clientWidth;
-    let emptyBlock = document.querySelector('.emptyBlock');
+    let verticalWidth = document.querySelector('.data-table__left-header').clientWidth;
+    let emptyBlock = document.querySelector('.empty-block');
 
     if (verticalWidth !== emptyBlock.clientWidth) {
       emptyBlock.style.minWidth = verticalWidth + 'px';
     }
   }
 
-  componentDidMount() {
-    // this.resizeEmptyBlock();
-  }
+
 
   render() {
     return (
-      <div className="head__vertical">
+      <div className="data-table__left-header">
         {console.log('render LeftHeader', this.props.headerTree)}
 
         {this.props.headerTree[0] &&
@@ -34,7 +33,6 @@ export default class LeftHeader extends Component {
             <HeaderCell
               key={node.ID}
               node={node}
-              isSubnode={false}
               isVertical={true}
               headerTree={this.props.headerTree}
               openBtnClick={this.props.openBtnClick}

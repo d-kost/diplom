@@ -105,13 +105,16 @@ class DataTable extends Component {
       node.isOpened = false;
       node.path = [...prevPath, { isChildren: false, index: i }];
 
-      node.Children.forEach(child => {
-        if (child.hasOwnProperty('isOpened')) {
-          delete child.isOpened;
-          delete child.path;
-          delete child.nextLevel;
-        }
-      });
+      if (node.Children) {
+        node.Children.forEach(child => {
+          if (child.hasOwnProperty('isOpened')) {
+            delete child.isOpened;
+            delete child.path;
+            delete child.nextLevel;
+          }
+        });
+      }
+      
 
       if (node.nextLevel) {
         node.nextLevel = this.goAllPaths(node.nextLevel, node.path);
@@ -126,27 +129,22 @@ class DataTable extends Component {
 
   render() {
     return (
-      <div className="head">
+      <div className="data-table">
 
         {console.log('topHeaderTree', this.state.topHeaderTree)}
-        <div className='horizontal-wrapper'>
-          <div className="emptyBlock">empty</div>
+        <div className='data-table__top-header-wrapper'>
+          <div className="empty-block">empty</div>
           <TopHeader
             headerTree={this.state.topHeaderTree}
             openBtnClick={this.openBtnClick}
           />
         </div>
 
-        <div className="head__content-wrapper">
+        <div className="data-table__content-wrapper">
           <LeftHeader
             headerTree={this.state.leftHeaderTree}
             openBtnClick={this.openBtnClick}
           />
-          {/* <LeftHeader
-            lNodes={this.props.lNodes}
-            headerValues={this.props.headerValues}
-            setupLeftHeaderList={this.setupLeftHeaderList}
-          /> */}
 
           {/* <Field horizontalNodes={this.state.horizontalNodes}
             verticalNodes={this.state.verticalNodes} /> */}

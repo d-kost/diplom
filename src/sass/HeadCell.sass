@@ -1,71 +1,57 @@
 $border: 2px ridge #3C3A49
 
+
 .node
-    border-left: $border
-    border-top: $border
-    // border-right: none
     display: flex
     flex-direction: column
     flex-grow: 1
-    &__subnode
-        border-bottom: none
-        &--vertical
-            border: none
-            border-top: $border
-            padding-left: 5px
-            flex-direction: row
-            &:first-child
-                border-top: none
-    &__container
-        // flex-grow: 1
-        overflow: hidden
-        &--vertical
-            width: 100px
-            
-        // padding-left: 5px
-        &--horizontal
-            padding-left: 5px
-            // min-height: 50px
-            height: 50px
-            
-            // padding-right: 5px
-    &--horizontal
-    &--vertical
-        border:
-            left: none
-            // right: $border
-            top: none
-            bottom: none//$border
+
+    &--top
+        border-right: $border
+        &:last-child
+            border-right: none
+
+    &--left
         padding-left: 5px
         flex-direction: row
+        border-bottom: $border
+        &:last-child
+            border-bottom: none
+    
+    &__container
+        display: flex
+        overflow: hidden
+        padding: 5px
+        &--left
+            width: 90px
+            
+        // padding-left: 5px
+        &--top
+            // padding-left: 5px
+            height: 40px
+            // padding-right: 5px
+        
+
     &__wrapper
         display: flex
         flex-grow: 1
-        &--horizontal
-        &--vertical
+        &--top
+            border-top: $border
+        &--left
+            border-left: $border
             flex-direction: column
-            // margin-left: 5px
-            border:
-                left: $border
-                // top: $border
-                
-            // color: yellow
-    &:first-child:not(&--vertical)
-        border-left: none
-    
-    &__closed
-        // border-bottom: none
+
+
     &__open-btn
         display: inline-block
-
         border: 1px solid #2B2A35
         text-align: center
+        min-width: 20px
         width: 20px
         height: 20px
         cursor: pointer
     &__text
         display: inline-block
-        margin: 5px
-        // margin-left: 5px
-        // margin-right: 5px
-        // width: 80px
+        margin: 0 5px
+        word-wrap: break-word
+        word-break: break-all

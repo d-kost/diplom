@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import '../../sass/HeadCell.sass';
+// import '../../sass/HeadCell.sass';
 import OpenBtn from "./OpenBtn";
 import PropTypes from 'prop-types';
 
