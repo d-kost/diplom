@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../../sass/Table.sass';
 import TopHeader from './TopHeader';
-// import LeftHeader from './LeftHeader';
+import LeftHeader from './LeftHeader';
 // import Field from './Field';
 import PropTypes from 'prop-types';
 
@@ -11,38 +11,27 @@ class DataTable extends Component {
     super(props);
 
     this.state = {
-      horizontalNodes: [],
-      verticalNodes: [],
-      topHeaderList: [],
-      topHeaderTree: this.props.topHeaderTree
+      topHeaderTree: this.props.topHeaderTree,
+      leftHeaderTree: this.props.leftHeaderTree
     }
 
-    this.setupTopHeaderList = this.setupTopHeaderList.bind(this);
     this.openBtnClick = this.openBtnClick.bind(this);
 
   }
 
 
-  setupTopHeaderList(newHeader) {
-    this.setState({
-      topHeaderList: newHeader
-    })
-  }
 
 
-  setupLeftHeaderList(newElement) {
-  }
-
-
-  openBtnClick(node) {
+  openBtnClick(node, isTop) {
     console.log('btnClick', node);
     let path = node.path.slice();
-    let topHeaderCopy = this.state.topHeaderTree.slice();
+    let headerCopy = isTop ?
+      this.state.leftHeaderTree.slice() : this.state.topHeaderTree.slice();
 
-    console.log('topHeaderCopy begin', topHeaderCopy);
+    console.log('headerCopy begin', headerCopy);
 
     //targetNode - узел, который ищется по заданному path
-    let targetNode = topHeaderCopy[path.shift()];
+    let targetNode = headerCopy[path.shift()];
 
     //не должно работать но работает
     path.forEach(step => {
@@ -63,11 +52,19 @@ class DataTable extends Component {
     }
 
     console.log('targetNode.isOpened', targetNode.isOpened);
-    console.log('topHeaderCopy end', topHeaderCopy);
+    console.log('headerCopy end', headerCopy);
 
-    this.setState({
-      topHeaderTree: topHeaderCopy
-    })
+
+    if (isTop) {
+      this.setState({
+        leftHeaderTree: headerCopy
+      })
+    } else {
+      this.setState({
+        topHeaderTree: headerCopy
+      })
+    }
+    
 
   }
 
@@ -141,6 +138,10 @@ class DataTable extends Component {
         </div>
 
         <div className="head__content-wrapper">
+          <LeftHeader
+            headerTree={this.state.leftHeaderTree}
+            openBtnClick={this.openBtnClick}
+          />
           {/* <LeftHeader
             lNodes={this.props.lNodes}
             headerValues={this.props.headerValues}
@@ -157,7 +158,8 @@ class DataTable extends Component {
 }
 
 DataTable.propTypes = {
-  topHeaderTree: PropTypes.arrayOf(PropTypes.object)
+  topHeaderTree: PropTypes.arrayOf(PropTypes.object),
+  leftHeaderTree: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default DataTable;

@@ -5,7 +5,8 @@ import DimensionSelection from './dimensions/DimensionSelection';
 function MainComponent() {
 
   const [dimensions, setDimensions] = useState([]);
-  const [headerTree, setHeaderTree] = useState([]);
+  const [topHeaderTree, setTopHeaderTree] = useState([]);
+  const [leftHeaderTree, setLeftHeaderTree] = useState([]);
 
 
   useEffect(() => {
@@ -27,7 +28,8 @@ function MainComponent() {
 
     console.log('query', query);
     
-    setHeaderTree(createHeaderTree(topH, values));
+    setTopHeaderTree(createHeaderTree(topH, values));
+    setLeftHeaderTree(createHeaderTree(leftH, values));
   }
 
   const createHeaderTree = (header, values) => {
@@ -96,9 +98,10 @@ function MainComponent() {
         />
       }
 
-      {headerTree.length !== 0 &&
+      {topHeaderTree.length !== 0 && leftHeaderTree.length !== 0 &&
         <DataTable
-          topHeaderTree={headerTree}
+          topHeaderTree={topHeaderTree}
+          leftHeaderTree={leftHeaderTree}
         />}
     </div>
   )

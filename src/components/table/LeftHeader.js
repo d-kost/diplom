@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import HeadCell from './HeadCell';
+import HeaderCell from './HeaderCell';
 import PropTypes from 'prop-types';
 
 export default class LeftHeader extends Component {
@@ -26,41 +26,29 @@ export default class LeftHeader extends Component {
   render() {
     return (
       <div className="head__vertical">
-        {console.log('this.props.lNodes', this.props.lNodes)}
+        {console.log('render LeftHeader', this.props.headerTree)}
 
-        {this.props.lNodes[0] &&
-          this.props.headerValues[this.props.lNodes[0].Abbr].map(value =>
-            <HeadCell
-              key={value.ID}
-              node={value}
+        {this.props.headerTree[0] &&
+          this.props.headerTree.map(node =>
+
+            <HeaderCell
+              key={node.ID}
+              node={node}
               isSubnode={false}
-              isOpened={true}
               isVertical={true}
-              index={1}
-              tNodes={this.props.lNodes}
-              headerValues={this.props.headerValues}
-              pushNode={this.props.setupLeftHeaderList}
+              headerTree={this.props.headerTree}
+              openBtnClick={this.props.openBtnClick}
               resizeEmptyBlock={this.resizeEmptyBlock}
             />
+
           )}
-        {/* {this.props.lNodes.map(n => <HeadCell
-          key={n.id}
-          node={n}
-          isSubnode={false}
-          isOpened={true}
-          isVertical={true}
-          index={1}
-          tNodes={this.props.lNodes}
-          headerValues={this.props.headerValues}
-          pushNode={this.props.addNodeToVerticalNodes}
-          resizeEmptyBlock={this.resizeEmptyBlock}
-        />)} */}
+        
       </div>
     )
   }
 }
 
 LeftHeader.propTypes = {
-  lNodes: PropTypes.arrayOf(PropTypes.object),
-  setupLeftHeaderList: PropTypes.func
+  headerTree: PropTypes.arrayOf(PropTypes.object),
+  openBtnClick: PropTypes.func
 }

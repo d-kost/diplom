@@ -11,7 +11,7 @@ class HeaderCell extends PureComponent {
   }
 
   openClickHandler() {
-    this.props.openBtnClick(this.props.node);
+    this.props.openBtnClick(this.props.node, this.props.isVertical);
   }
 
 
