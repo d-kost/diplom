@@ -5,9 +5,7 @@ import DimensionSelection from './dimensions/DimensionSelection';
 function MainComponent() {
 
   const [dimensions, setDimensions] = useState([]);
-  const [leftHeader, setLeftHeader] = useState([]);
-  const [topHeader, setTopHeader] = useState([]);
-  const [headerValues, setHeaderValues] = useState({});
+  const [headerTree, setHeaderTree] = useState([]);
 
 
   useEffect(() => {
@@ -28,13 +26,44 @@ function MainComponent() {
     let query = `http://localhost:8080/vals?hdr=${hdr}${params}`;
 
     console.log('query', query);
-    console.log('topH', topH);
-    console.log('values', values);
-    setLeftHeader(leftH);
-    setTopHeader(topH);
-    setHeaderValues(values)
+    
+    setHeaderTree(createHeaderTree(topH, values));
   }
 
+  const createHeaderTree = (header, values) => {
+    let i = 0;
+    let result = [];
+    result = createLevel(i, header, values, []);
+    console.log('testFunction', result);
+    return result;
+
+  }
+
+  const createLevel = (level, header, values, parentIndexes) => {
+    let result = [];
+
+    values[header[level].Abbr].forEach((item, i) => {
+      //item : {ID, Name, Children}
+      let newItem = JSON.parse(JSON.stringify(item));
+      newItem.isOpened = false;
+
+      if (parentIndexes.length > 0) {
+        //isChildren: false - path to values
+        newItem.path = [...parentIndexes, { isChildren: false, index: i }];
+      } else {
+        newItem.path = [i];
+      }
+
+
+      result.push(newItem);
+
+      if (header[level + 1]) {
+        newItem.nextLevel = createLevel(level + 1, header, values, newItem.path);
+      }
+    })
+
+    return result;
+  }
 
   const createQueryHdr = (header) => {
     return header.map(dimension => dimension.Abbr);
@@ -60,18 +89,16 @@ function MainComponent() {
 
   return (
     <div>
-      {dimensions.length &&
+      {dimensions.length !== 0 &&
         <DimensionSelection
           dimensions={dimensions}
           onApplyClick={onApplyClick}
         />
       }
 
-      {topHeader.length && leftHeader.length &&
+      {headerTree.length !== 0 &&
         <DataTable
-          tNodes={topHeader}
-          lNodes={leftHeader}
-          headerValues={headerValues}
+          topHeaderTree={headerTree}
         />}
     </div>
   )

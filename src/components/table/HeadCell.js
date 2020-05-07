@@ -27,6 +27,9 @@ class HeadCell extends PureComponent {
         isLevelEndNode: prevState.isOpened && this.props.tNodes[this.props.index],
       }
     })
+
+    this.props.openBtnClick(this.props.history, this.state.node.ID, this.state.node.Children);
+    //на открытие/закрытие отправлять history и id или что-то другое в datatable
   }
 
   // pushNode = (node) => {
@@ -53,38 +56,17 @@ class HeadCell extends PureComponent {
     // if (!this.props.isVertical &&
     //   !this.state.isOpened) {
 
-    //   if (!this.props.tNodes[this.props.index]) {
-    //     //если компонент является конечным во всем заголовке
-    //     this.props.pushNode(this.state.node);
-    //     console.log('history', this.props.history);
-
-
-    //   } else {
-    //     //если компонент является конечным только на своём уровне
-    //     this.prop.pushNode(this.state.node);
-
-    //   }
-    // }
 
     if (this.state.isEndNode) {
       //если компонент является конечным во всем заголовке
       let history = JSON.parse(JSON.stringify(this.props.history));
       history.endNodes.push(this.state.node.ID);
       this.props.pushNode(history);
-
-
-      // console.log('history', this.props.history);
-      // console.log('isEndNode', this.state.node.Name + ' ' + this.state.node.ID);
-
     }
+
     if (this.state.isLevelEndNode) {
       //если компонент является конечным только на своём уровне
-      // this.props.pushNode(this.state.node);
-      // console.log('isLevelEndNode', this.state.node.Name + ' ' + this.state.node.ID);
     }
-
-    // this.props.pushNode(this.state.node);
-
 
     if (this.props.isVertical) {
       this.props.resizeEmptyBlock();
@@ -97,10 +79,6 @@ class HeadCell extends PureComponent {
     if (this.props.isSubnode) nodeClass.push("node__subnode");
     if (this.props.isSubnode && this.props.isVertical) nodeClass.push("node__subnode--vertical");
     if (!this.props.isSubnode && this.props.isVertical) nodeClass.push("node--vertical");
-
-    // if (!this.state.isOpened && !this.props.isVertical) nodeClass.push("cell-width");
-    // if (!this.state.isOpened && this.props.isVertical) nodeClass.push("cell-height");
-
 
     if (!this.props.isVertical &&
       this.state.isEndNode) {
@@ -198,6 +176,7 @@ class HeadCell extends PureComponent {
                 index={this.props.index}
                 tNodes={this.props.tNodes}
                 headerValues={this.props.headerValues}
+                openBtnClick={this.props.openBtnClick}
                 resizeEmptyBlock={this.props.resizeEmptyBlock}
               />)
 
@@ -222,6 +201,7 @@ class HeadCell extends PureComponent {
                 tNodes={this.props.tNodes}
                 headerValues={this.props.headerValues}
                 pushNode={this.props.pushNode}
+                openBtnClick={this.props.openBtnClick}
                 resizeEmptyBlock={this.props.resizeEmptyBlock}
               />)}
           </div>
@@ -246,6 +226,7 @@ HeadCell.propTypes = {
   tNodes: PropTypes.arrayOf(PropTypes.object),
   headerValues: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
   pushNode: PropTypes.func,
+  openBtnClick: PropTypes.func,
   resizeEmptyBlock: PropTypes.func
 }
 

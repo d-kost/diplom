@@ -14,36 +14,40 @@ const DimensionSelection = (props) => {
   const [chosenDimensionValues, setDimensionChosenValues] = useState({});
 
 
-  useEffect(() => { 
-    setupDimensionValues();
-  }, [])
+  useEffect(() => {
+    const setupDimensionValues = () => {
+      console.log('setupDimensionValues');
 
+      let values = {};
+      let chosenValues = {};
 
-  const setupDimensionValues = () => {
-    let values = {};
-    let chosenValues = {};
+      let requests = props.dimensions.map(dimension => {
+        return (
 
-    let requests = props.dimensions.map(dimension => {
-      return (
+          fetch(`http://localhost:8080/dim?abbr=${dimension.Abbr}`)
+            .then(response => response.json())
+            .then(json => {
+              values = { ...values, [dimension.Abbr]: json };
 
-        fetch(`http://localhost:8080/dim?abbr=${dimension.Abbr}`)
-          .then(response => response.json())
-          .then(json => {
-            values = { ...values, [dimension.Abbr]: json };
-
-            let value = json[0] ? json[0] : null;
-            chosenValues = { ...chosenValues, [dimension.Abbr]: [value] };
-          })
+              let value = json[0] ? json[0] : null;
+              chosenValues = { ...chosenValues, [dimension.Abbr]: [value] };
+            })
 
         )
-    });
-
-    Promise.all(requests)
-      .then(() => {
-        setDimensionValues(values);
-        setDimensionChosenValues(chosenValues);
       });
-  }
+
+      Promise.all(requests)
+        .then(() => {
+          setDimensionValues(values);
+          setDimensionChosenValues(chosenValues);
+        });
+    }
+
+    setupDimensionValues();
+
+    //on mounting
+  }, [props.dimensions])
+
 
 
   const onOpenModal = (abbr) => {
@@ -52,13 +56,13 @@ const DimensionSelection = (props) => {
   }
 
 
-  const onModalAcceptClick = (values) => { 
-    setDimensionChosenValues({...chosenDimensionValues, [modalAbbr]: values});
+  const onModalAcceptClick = (values) => {
+    setDimensionChosenValues({ ...chosenDimensionValues, [modalAbbr]: values });
     setModalAbbr(null);
     setShowModal(false);
   }
 
-  
+
   const onModalCancelClick = () => {
     setModalAbbr(null);
     setShowModal(false);
