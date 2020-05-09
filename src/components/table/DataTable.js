@@ -1,37 +1,95 @@
-import React, { Component } from 'react';
-import '../../sass/Table.sass';
+import React, { useState, useEffect, useCallback } from 'react';
+import '../../sass/DataTable.sass';
 import TopHeader from './TopHeader';
 import LeftHeader from './LeftHeader';
-// import Field from './Field';
+import ValuesArea from './ValuesArea';
 import PropTypes from 'prop-types';
 
-class DataTable extends Component {
+const DataTable = (props) => {
 
-  constructor(props) {
-    super(props);
+  const [topHeaderTree, setTopHeaderTree] = useState([]); //useState(props.topHeaderTree);
+  const [leftHeaderTree, setLeftHeaderTree] = useState([]); //useState(props.leftHeaderTree);
+  
+  const [topHeaderKeys, setTopHeaderKeys] = useState([]);
+  const [leftHeaderKeys, setLeftHeaderKeys] = useState([]);
 
-    this.state = {
-      topHeaderTree: this.props.topHeaderTree,
-      leftHeaderTree: this.props.leftHeaderTree
+
+  const processNextLevel = useCallback((level, prevIds, result) => {
+    let ids = [];
+
+    level.forEach(node => {
+
+      if (!node.isOpened) {
+        ids = [...prevIds, node.ID];
+
+        if (node.nextLevel) {
+          //go to nextLevel
+          processNextLevel(node.nextLevel, ids, result);
+
+        } else {
+          //end node
+          result.push(ids);
+        }
+
+      } else {
+
+        ids = prevIds;
+        if (node.Children) {
+          //go to Children
+          processNextLevel(node.Children, ids, result);
+        }
+      }
+    })
+  }, [])
+
+  
+  const getKeysFromHeader = useCallback((header) => {
+    let keys = [];
+    processNextLevel(header, [], keys);
+
+    return keys;
+    // console.log('header keys', keys);
+  }, [processNextLevel])
+
+
+  useEffect(() => {
+    console.log('dataTable changed props', props.topHeaderTree);
+    
+    setTopHeaderTree(props.topHeaderTree);
+    setLeftHeaderTree(props.leftHeaderTree);
+
+    let topKeys = getKeysFromHeader(props.topHeaderTree);
+    let leftKeys = getKeysFromHeader(props.leftHeaderTree);
+
+    setTopHeaderKeys(topKeys);
+    setLeftHeaderKeys(leftKeys);
+
+  }, [props.topHeaderTree, props.leftHeaderTree, getKeysFromHeader])
+
+
+
+  const openBtnClick = (node, isTop) => {
+    let path = node.path.slice();
+    let newHeader = isTop ?
+      leftHeaderTree.slice() : topHeaderTree.slice();
+
+      newHeader = changeHeader(path, newHeader);
+
+    let keys = getKeysFromHeader(newHeader);
+
+    if (isTop) {
+      setLeftHeaderTree(newHeader);
+      setLeftHeaderKeys(keys);
+    } else {
+      setTopHeaderTree(newHeader);
+      setTopHeaderKeys(keys);
     }
-
-    this.openBtnClick = this.openBtnClick.bind(this);
-
   }
 
 
-
-
-  openBtnClick(node, isTop) {
-    console.log('btnClick', node);
-    let path = node.path.slice();
-    let headerCopy = isTop ?
-      this.state.leftHeaderTree.slice() : this.state.topHeaderTree.slice();
-
-    console.log('headerCopy begin', headerCopy);
-
+  const changeHeader = (path, header) => {
     //targetNode - узел, который ищется по заданному path
-    let targetNode = headerCopy[path.shift()];
+    let targetNode = header[path.shift()];
 
     //не должно работать но работает
     path.forEach(step => {
@@ -48,27 +106,14 @@ class DataTable extends Component {
 
     targetNode.isOpened = !targetNode.isOpened;
     if (targetNode.isOpened) {
-      targetNode = this.createNewPropertiesToChildren(targetNode);
+      targetNode = createNewPropertiesToChildren(targetNode);
     }
 
-    console.log('targetNode.isOpened', targetNode.isOpened);
-    console.log('headerCopy end', headerCopy);
-
-
-    if (isTop) {
-      this.setState({
-        leftHeaderTree: headerCopy
-      })
-    } else {
-      this.setState({
-        topHeaderTree: headerCopy
-      })
-    }
-    
-
+    return header;
   }
 
-  createNewPropertiesToChildren(node) {
+
+  const createNewPropertiesToChildren = (node) => {
     if (node.Children) {
       node.Children.forEach((child, i) => {
         if (!child.hasOwnProperty('isOpened')) {
@@ -77,7 +122,7 @@ class DataTable extends Component {
           child.path = [...node.path, { isChildren: true, index: i }];
 
           if (node.nextLevel) {
-            child.nextLevel = this.getNextLevelForChild(node.nextLevel, child.path);
+            child.nextLevel = getNextLevelForChild(node.nextLevel, child.path);
             // child.nextLevel = JSON.parse(JSON.stringify(node.nextLevel));
           }
 
@@ -89,17 +134,17 @@ class DataTable extends Component {
   }
 
 
-  getNextLevelForChild(parentLevel, prevPath) {
+  const getNextLevelForChild = (parentLevel, prevPath) => {
     let level = JSON.parse(JSON.stringify(parentLevel));
 
-    let result = this.goAllPaths(level, prevPath);
+    let result = goAllPaths(level, prevPath);
 
     return result;
 
   }
 
 
-  goAllPaths(level, prevPath) {
+  const goAllPaths = (level, prevPath) => {
 
     level.forEach((node, i) => {
       node.isOpened = false;
@@ -114,10 +159,10 @@ class DataTable extends Component {
           }
         });
       }
-      
+
 
       if (node.nextLevel) {
-        node.nextLevel = this.goAllPaths(node.nextLevel, node.path);
+        node.nextLevel = goAllPaths(node.nextLevel, node.path);
       }
 
     })
@@ -127,32 +172,35 @@ class DataTable extends Component {
   }
 
 
-  render() {
-    return (
-      <div className="data-table">
+  return (
+    <div className="data-table">
 
-        {console.log('topHeaderTree', this.state.topHeaderTree)}
-        <div className='data-table__top-header-wrapper'>
-          <div className="empty-block">empty</div>
-          <TopHeader
-            headerTree={this.state.topHeaderTree}
-            openBtnClick={this.openBtnClick}
+      {/* {console.log('topHeaderTree', topHeaderTree)} */}
+      <div className='data-table__top-header-wrapper'>
+        <div className="empty-block">empty</div>
+        <TopHeader
+          headerTree={topHeaderTree}
+          openBtnClick={openBtnClick}
+        />
+      </div>
+
+      <div className="data-table__content-wrapper">
+        <LeftHeader
+          headerTree={leftHeaderTree}
+          openBtnClick={openBtnClick}
+        />
+
+        <ValuesArea
+            obtainedValues={props.obtainedValues}
+            topHeaderKeys={topHeaderKeys}
+            leftHeaderKeys={leftHeaderKeys}
           />
-        </div>
-
-        <div className="data-table__content-wrapper">
-          <LeftHeader
-            headerTree={this.state.leftHeaderTree}
-            openBtnClick={this.openBtnClick}
-          />
-
-          {/* <Field horizontalNodes={this.state.horizontalNodes}
-            verticalNodes={this.state.verticalNodes} /> */}
-        </div>
 
       </div>
-    )
-  }
+
+    </div>
+  )
+
 }
 
 DataTable.propTypes = {

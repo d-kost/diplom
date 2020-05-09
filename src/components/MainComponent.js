@@ -7,6 +7,7 @@ function MainComponent() {
   const [dimensions, setDimensions] = useState([]);
   const [topHeaderTree, setTopHeaderTree] = useState([]);
   const [leftHeaderTree, setLeftHeaderTree] = useState([]);
+  const [obtainedValuesForValuesArea, setObtainedValuesForValuesArea] = useState([]);
 
 
   useEffect(() => {
@@ -27,18 +28,38 @@ function MainComponent() {
     let query = `http://localhost:8080/vals?hdr=${hdr}${params}`;
 
     console.log('query', query);
-    
-    setTopHeaderTree(createHeaderTree(topH, values));
-    setLeftHeaderTree(createHeaderTree(leftH, values));
+
+
+    fetch(query)
+      .then(response => response.json())
+      .then(json => {
+        setObtainedValuesForValuesArea(getHashTable(json));
+
+        setTopHeaderTree(createHeaderTree(topH, values));
+        setLeftHeaderTree(createHeaderTree(leftH, values));
+      })
+
   }
+
+  
+  const getHashTable = (valsArray) => {
+    let resultMap = new Map();
+
+    valsArray.forEach(nestedArray => {
+      let value = nestedArray.shift();
+      resultMap.set(nestedArray.join(' '), value);  
+    })
+
+    return resultMap;
+  }
+
 
   const createHeaderTree = (header, values) => {
     let i = 0;
     let result = [];
     result = createLevel(i, header, values, []);
-    console.log('testFunction', result);
-    return result;
 
+    return result;
   }
 
   const createLevel = (level, header, values, parentIndexes) => {
@@ -102,6 +123,7 @@ function MainComponent() {
         <DataTable
           topHeaderTree={topHeaderTree}
           leftHeaderTree={leftHeaderTree}
+          obtainedValues={obtainedValuesForValuesArea}
         />}
     </div>
   )
