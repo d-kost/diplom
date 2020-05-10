@@ -101,7 +101,7 @@ class HeaderCell extends PureComponent {
               openClickHandler={this.openClickHandler}
             />}
 
-          {console.log('render head cell')}
+          {/* {console.log('render head cell')} */}
           <p className="node__text">
             {this.props.node.ID} {this.props.node.Name}
           </p>

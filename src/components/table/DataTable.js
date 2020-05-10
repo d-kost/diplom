@@ -4,14 +4,18 @@ import TopHeader from './TopHeader';
 import LeftHeader from './LeftHeader';
 import ValuesArea from './ValuesArea';
 import PropTypes from 'prop-types';
+import * as queryHelper from '../../js_modules/queryHelper';
 
 const DataTable = (props) => {
 
   const [topHeaderTree, setTopHeaderTree] = useState([]); //useState(props.topHeaderTree);
   const [leftHeaderTree, setLeftHeaderTree] = useState([]); //useState(props.leftHeaderTree);
-  
+
   const [topHeaderKeys, setTopHeaderKeys] = useState([]);
   const [leftHeaderKeys, setLeftHeaderKeys] = useState([]);
+
+  const [obtainedValues, setObtainedValues] = useState();
+  const [queryParams, setQueryParams] = useState({});
 
 
   const processNextLevel = useCallback((level, prevIds, result) => {
@@ -42,21 +46,23 @@ const DataTable = (props) => {
     })
   }, [])
 
-  
+
   const getKeysFromHeader = useCallback((header) => {
     let keys = [];
     processNextLevel(header, [], keys);
 
     return keys;
-    // console.log('header keys', keys);
   }, [processNextLevel])
 
 
   useEffect(() => {
     console.log('dataTable changed props', props.topHeaderTree);
-    
+
     setTopHeaderTree(props.topHeaderTree);
     setLeftHeaderTree(props.leftHeaderTree);
+    setObtainedValues(props.obtainedValues);
+
+    setQueryParams(props.queryParams);
 
     let topKeys = getKeysFromHeader(props.topHeaderTree);
     let leftKeys = getKeysFromHeader(props.leftHeaderTree);
@@ -64,7 +70,10 @@ const DataTable = (props) => {
     setTopHeaderKeys(topKeys);
     setLeftHeaderKeys(leftKeys);
 
-  }, [props.topHeaderTree, props.leftHeaderTree, getKeysFromHeader])
+  },
+    [props.topHeaderTree, props.leftHeaderTree,
+      getKeysFromHeader, props.queryParams, props.obtainedValues]
+  )
 
 
 
@@ -73,17 +82,53 @@ const DataTable = (props) => {
     let newHeader = isTop ?
       leftHeaderTree.slice() : topHeaderTree.slice();
 
-      newHeader = changeHeader(path, newHeader);
+    let changedHeader = changeHeader(path, newHeader);
+    let keys = getKeysFromHeader(changedHeader.header);
 
-    let keys = getKeysFromHeader(newHeader);
 
-    if (isTop) {
-      setLeftHeaderTree(newHeader);
-      setLeftHeaderKeys(keys);
-    } else {
-      setTopHeaderTree(newHeader);
-      setTopHeaderKeys(keys);
+    let newQueryParams = Object.assign({}, queryParams);
+
+    //if isOpened add children ids to queryParams values
+    if (changedHeader.isOpened) {
+
+      newQueryParams.values[changedHeader.Abbr].push(
+        ...getQueryValues(node.Children, changedHeader.Abbr)
+      );
+
     }
+
+
+    let query = queryHelper.getQuery(newQueryParams);
+
+    fetch(query)
+      .then(response => response.json())
+      .then(json => {
+        queryHelper.getHashTable(json, obtainedValues);
+
+        if (isTop) {
+          setLeftHeaderTree(changedHeader.header);
+          setLeftHeaderKeys(keys);
+        } else {
+          setTopHeaderTree(changedHeader.header);
+          setTopHeaderKeys(keys);
+        }
+
+        setQueryParams(newQueryParams);
+
+      })
+  }
+
+
+  const getQueryValues = (nodeList, abbr) => {
+    let values = [];
+
+    nodeList.forEach(node => {
+      if (!queryParams.values[abbr].includes(node.ID)) {
+        values.push(node.ID);
+      }
+    });
+
+    return values;
   }
 
 
@@ -109,7 +154,7 @@ const DataTable = (props) => {
       targetNode = createNewPropertiesToChildren(targetNode);
     }
 
-    return header;
+    return { header, isOpened: targetNode.isOpened, Abbr: targetNode.Abbr };
   }
 
 
@@ -118,6 +163,7 @@ const DataTable = (props) => {
       node.Children.forEach((child, i) => {
         if (!child.hasOwnProperty('isOpened')) {
           child.isOpened = false;
+          child.Abbr = node.Abbr;
           //isChildren: true - path to children
           child.path = [...node.path, { isChildren: true, index: i }];
 
@@ -191,10 +237,10 @@ const DataTable = (props) => {
         />
 
         <ValuesArea
-            obtainedValues={props.obtainedValues}
-            topHeaderKeys={topHeaderKeys}
-            leftHeaderKeys={leftHeaderKeys}
-          />
+          obtainedValues={obtainedValues}
+          topHeaderKeys={topHeaderKeys}
+          leftHeaderKeys={leftHeaderKeys}
+        />
 
       </div>
 

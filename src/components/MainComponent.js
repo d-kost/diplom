@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from './table/DataTable';
 import DimensionSelection from './dimensions/DimensionSelection';
+import * as queryHelper from '../js_modules/queryHelper';
 
 function MainComponent() {
 
   const [dimensions, setDimensions] = useState([]);
   const [topHeaderTree, setTopHeaderTree] = useState([]);
   const [leftHeaderTree, setLeftHeaderTree] = useState([]);
-  const [obtainedValuesForValuesArea, setObtainedValuesForValuesArea] = useState([]);
+
+  const [obtainedValuesForValuesArea, setObtainedValuesForValuesArea] = useState();
+  const [queryParams, setQueryParams] = useState({});
 
 
   useEffect(() => {
@@ -18,14 +21,19 @@ function MainComponent() {
 
 
   const onApplyClick = (singleValues, leftH, topH, values) => {
-    let hdr = [];
+    let queryParams = {
+      topHdr: [],
+      leftHdr: [],
+      values: []
+    }
 
-    hdr.push(...createQueryHdr(leftH));
-    hdr.push(...createQueryHdr(topH));
+    queryParams.leftHdr = queryHelper.createQueryHdr(leftH);
+    queryParams.topHdr = queryHelper.createQueryHdr(topH);
 
-    let params = createQueryParams(values);
+    queryParams.values = getValuesIds(values);//.map(value => value.ID);
+    // queryParams.values = queryHelper.createQueryValues(values);
 
-    let query = `http://localhost:8080/vals?hdr=${hdr}${params}`;
+    let query = queryHelper.getQuery(queryParams);
 
     console.log('query', query);
 
@@ -33,24 +41,28 @@ function MainComponent() {
     fetch(query)
       .then(response => response.json())
       .then(json => {
-        setObtainedValuesForValuesArea(getHashTable(json));
+        let hashTable = queryHelper.getHashTable(json); 
+        setObtainedValuesForValuesArea(hashTable);
 
         setTopHeaderTree(createHeaderTree(topH, values));
         setLeftHeaderTree(createHeaderTree(leftH, values));
+
+        setQueryParams(queryParams);
       })
 
   }
 
-  
-  const getHashTable = (valsArray) => {
-    let resultMap = new Map();
+  const getValuesIds = (values) => {
+    let valuesIds = {};
 
-    valsArray.forEach(nestedArray => {
-      let value = nestedArray.shift();
-      resultMap.set(nestedArray.join(' '), value);  
-    })
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        valuesIds[[key]] =
+        values[key].map(value => value ? value.ID : null);
+      }
+    }
 
-    return resultMap;
+    return valuesIds;
   }
 
 
@@ -62,6 +74,7 @@ function MainComponent() {
     return result;
   }
 
+
   const createLevel = (level, header, values, parentIndexes) => {
     let result = [];
 
@@ -69,6 +82,7 @@ function MainComponent() {
       //item : {ID, Name, Children}
       let newItem = JSON.parse(JSON.stringify(item));
       newItem.isOpened = false;
+      newItem.Abbr = header[level].Abbr;
 
       if (parentIndexes.length > 0) {
         //isChildren: false - path to values
@@ -88,27 +102,6 @@ function MainComponent() {
     return result;
   }
 
-  const createQueryHdr = (header) => {
-    return header.map(dimension => dimension.Abbr);
-  }
-
-  const createQueryParams = (values) => {
-    let params = '';
-
-    for (const key in values) {
-      if (values.hasOwnProperty(key)) {
-        params += `&${key}=`;
-
-        if (values[key] != null) {
-          params += values[key].map(value => value ? value.ID : '').join(',');
-        }
-
-      }
-    }
-    return params;
-  }
-
-
 
   return (
     <div>
@@ -124,6 +117,7 @@ function MainComponent() {
           topHeaderTree={topHeaderTree}
           leftHeaderTree={leftHeaderTree}
           obtainedValues={obtainedValuesForValuesArea}
+          queryParams={queryParams}
         />}
     </div>
   )

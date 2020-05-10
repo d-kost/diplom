@@ -17,8 +17,9 @@ class ValuesArea extends Component {
                 let key = `${keyLeftList.join(' ')} ${keyTopList.join(' ')}`;
                 // console.log('values area key', key);
                 
-                let value = this.props.obtainedValues.get(key);
 
+                let value = this.props.obtainedValues.get(key);
+                // console.log('values area value', value);
                 return (
                   <ValuesAreaCell
                     key={keyTopList}
@@ -38,8 +39,9 @@ class ValuesArea extends Component {
 }
 
 ValuesArea.propTypes = {
-  verticalNodes: PropTypes.arrayOf(PropTypes.string),
-  horizontalNodes: PropTypes.arrayOf(PropTypes.string)
+  obtainedValues: PropTypes.instanceOf(Map),
+  topHeaderKeys: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
+  leftHeaderKeys: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number))
 }
 
 export default ValuesArea;
