@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const ChosenIndicatorField = (props) => {
+const ChosenValueList = (props) => {
   return (
     <ul className='modal-list'>
 
@@ -23,4 +23,4 @@ const ChosenIndicatorField = (props) => {
   )
 }
 
-export default ChosenIndicatorField;
+export default ChosenValueList;

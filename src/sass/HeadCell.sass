@@ -1,12 +1,14 @@
-$border: 2px ridge #3C3A49
+@import 'vars'
 
-
+    
 .node
     display: flex
     flex-direction: column
     flex-grow: 1
+    
 
     &--top
+        max-width: min-content
         border-right: $border
         &:last-child
             border-right: none

@@ -1,19 +1,20 @@
-$border: 2px ridge #3C3A49
+@import 'vars'
 
 %head-side
     display: flex
-    width: max-content
-    background-color: #cdccd6
+    // width: max-content
+    background-color: $headerBackground
     border-right: $border
     border-bottom: $border
 
     
 .data-table
     font-size: 14px
-    margin-left: 10px
+    // margin-left: 10px
+    width: fit-content
     max-width: 1200px
     // max-height: 500px
-    max-height: 700px
+    max-height: 500px
     overflow: scroll
     &__top-header
         @extend %head-side
@@ -34,6 +35,7 @@ $border: 2px ridge #3C3A49
         width: max-content
 
     &__top-header-wrapper
+        width: min-content
         display: flex
         position: sticky
         top: 0
@@ -49,7 +51,8 @@ $border: 2px ridge #3C3A49
 
 
 .empty-block
-    background-color: blue
+    // background-color: blue
+    background-color: $headerBackground
     z-index: 200
     position: sticky
     left: 0

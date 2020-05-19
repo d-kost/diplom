@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataTable from './table/DataTable';
 import DimensionSelection from './dimensions/DimensionSelection';
 import * as queryHelper from '../js_modules/queryHelper';
+import { createHeaderTree } from '../js_modules/tableHeaderHelper';
 
 function MainComponent() {
 
@@ -14,7 +15,7 @@ function MainComponent() {
 
 
   useEffect(() => {
-    fetch('http://localhost:8080/dims')
+    fetch(queryHelper.getDimensionsQuery())
       .then(response => response.json())
       .then(json => setDimensions(json))
   }, [])
@@ -33,7 +34,7 @@ function MainComponent() {
     queryParams.values = getValuesIds(values);//.map(value => value.ID);
     // queryParams.values = queryHelper.createQueryValues(values);
 
-    let query = queryHelper.getQuery(queryParams);
+    let query = queryHelper.getDataTableQuery(queryParams);
 
     console.log('query', query);
 
@@ -66,45 +67,9 @@ function MainComponent() {
   }
 
 
-  const createHeaderTree = (header, values) => {
-    let i = 0;
-    let result = [];
-    result = createLevel(i, header, values, []);
-
-    return result;
-  }
-
-
-  const createLevel = (level, header, values, parentIndexes) => {
-    let result = [];
-
-    values[header[level].Abbr].forEach((item, i) => {
-      //item : {ID, Name, Children}
-      let newItem = JSON.parse(JSON.stringify(item));
-      newItem.isOpened = false;
-      newItem.Abbr = header[level].Abbr;
-
-      if (parentIndexes.length > 0) {
-        //isChildren: false - path to values
-        newItem.path = [...parentIndexes, { isChildren: false, index: i }];
-      } else {
-        newItem.path = [i];
-      }
-
-
-      result.push(newItem);
-
-      if (header[level + 1]) {
-        newItem.nextLevel = createLevel(level + 1, header, values, newItem.path);
-      }
-    })
-
-    return result;
-  }
-
 
   return (
-    <div>
+    <div className='app-container'>
       {dimensions.length !== 0 &&
         <DimensionSelection
           dimensions={dimensions}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import IndicatorsTreeNode from './IndicatorsTreeNode';
+import ValuesTreeNode from './ValuesTreeNode';
 
 
-const IndicatorsTree = (props) => {
+const ValuesTree = (props) => {
 
   const [isOpened, setIsOpened] = useState(false);
 
@@ -13,7 +13,7 @@ const IndicatorsTree = (props) => {
   return (
     <div>
       {/* {console.log('indicator tree render')} */}
-      <IndicatorsTreeNode
+      <ValuesTreeNode
         node={props.node}
         onSwitchClick={onSwitchClick}
         isOpened={isOpened}
@@ -23,7 +23,7 @@ const IndicatorsTree = (props) => {
       <div className='modal-tree__children'>
         {isOpened && props.node.Children &&
           props.node.Children.map(subnode => {
-            return (<IndicatorsTree
+            return (<ValuesTree
               key={subnode.ID}
               node={subnode}
               onNodeDownClick={props.onNodeDownClick}
@@ -38,4 +38,4 @@ const IndicatorsTree = (props) => {
 }
 
 
-export default React.memo(IndicatorsTree);
+export default React.memo(ValuesTree);

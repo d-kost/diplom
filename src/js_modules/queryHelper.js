@@ -1,4 +1,4 @@
-export const getQuery = (queryParams) => {
+export const getDataTableQuery = (queryParams) => {
   let hdr = [...queryParams.leftHdr, ...queryParams.topHdr];
   let values = createQueryValues(queryParams.values);
 
@@ -8,6 +8,16 @@ export const getQuery = (queryParams) => {
 
 export const createQueryHdr = (header) => {
   return header.map(dimension => dimension.Abbr);
+}
+
+
+export const getDimensionsQuery = () => {
+  return 'http://localhost:8080/dims';
+}
+
+
+export const getDimensionValuesQuery = (abbr) => {
+  return `http://localhost:8080/dim?abbr=${abbr}`;
 }
 
 

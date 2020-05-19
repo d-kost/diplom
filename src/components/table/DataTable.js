@@ -5,6 +5,7 @@ import LeftHeader from './LeftHeader';
 import ValuesArea from './ValuesArea';
 import PropTypes from 'prop-types';
 import * as queryHelper from '../../js_modules/queryHelper';
+import { changeHeader } from '../../js_modules/tableHeaderHelper';
 
 const DataTable = (props) => {
 
@@ -98,8 +99,8 @@ const DataTable = (props) => {
     }
 
 
-    let query = queryHelper.getQuery(newQueryParams);
-
+    let query = queryHelper.getDataTableQuery(newQueryParams);
+    //делать fetch только если изменилось что-то там...
     fetch(query)
       .then(response => response.json())
       .then(json => {
@@ -132,98 +133,13 @@ const DataTable = (props) => {
   }
 
 
-  const changeHeader = (path, header) => {
-    //targetNode - узел, который ищется по заданному path
-    let targetNode = header[path.shift()];
-
-    //не должно работать но работает
-    path.forEach(step => {
-
-      if (!step.isChildren && targetNode.nextLevel) {
-        targetNode = targetNode.nextLevel;
-      } else if (step.isChildren && targetNode.Children) {
-        targetNode = targetNode.Children;
-      }
-
-      targetNode = targetNode[step.index];
-
-    });
-
-    targetNode.isOpened = !targetNode.isOpened;
-    if (targetNode.isOpened) {
-      targetNode = createNewPropertiesToChildren(targetNode);
-    }
-
-    return { header, isOpened: targetNode.isOpened, Abbr: targetNode.Abbr };
-  }
-
-
-  const createNewPropertiesToChildren = (node) => {
-    if (node.Children) {
-      node.Children.forEach((child, i) => {
-        if (!child.hasOwnProperty('isOpened')) {
-          child.isOpened = false;
-          child.Abbr = node.Abbr;
-          //isChildren: true - path to children
-          child.path = [...node.path, { isChildren: true, index: i }];
-
-          if (node.nextLevel) {
-            child.nextLevel = getNextLevelForChild(node.nextLevel, child.path);
-            // child.nextLevel = JSON.parse(JSON.stringify(node.nextLevel));
-          }
-
-        }
-      })
-    }
-
-    return node;
-  }
-
-
-  const getNextLevelForChild = (parentLevel, prevPath) => {
-    let level = JSON.parse(JSON.stringify(parentLevel));
-
-    let result = goAllPaths(level, prevPath);
-
-    return result;
-
-  }
-
-
-  const goAllPaths = (level, prevPath) => {
-
-    level.forEach((node, i) => {
-      node.isOpened = false;
-      node.path = [...prevPath, { isChildren: false, index: i }];
-
-      if (node.Children) {
-        node.Children.forEach(child => {
-          if (child.hasOwnProperty('isOpened')) {
-            delete child.isOpened;
-            delete child.path;
-            delete child.nextLevel;
-          }
-        });
-      }
-
-
-      if (node.nextLevel) {
-        node.nextLevel = goAllPaths(node.nextLevel, node.path);
-      }
-
-    })
-
-    return level;
-
-  }
-
 
   return (
     <div className="data-table">
 
       {/* {console.log('topHeaderTree', topHeaderTree)} */}
       <div className='data-table__top-header-wrapper'>
-        <div className="empty-block">empty</div>
+        <div className="empty-block"></div>
         <TopHeader
           headerTree={topHeaderTree}
           openBtnClick={openBtnClick}

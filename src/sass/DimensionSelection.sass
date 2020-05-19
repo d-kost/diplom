@@ -1,20 +1,26 @@
-$border: 2px solid #737373
+@import 'vars'
 
 .measure-selection
     display: flex
-    margin: 0 50px
+    margin: 0
     width: max-content
-    border: $border
+    border: $dimensionBorder
     border-radius: 5px
     
     &__title
-        border-bottom: $border
+        border-bottom: $dimensionBorder
     &__panel
         width: 400px
-        border-right: $border
+        border-right: $dimensionBorder
         &:last-child
             border-right: none
-        
+
+.dimensions-apply
+    &__button
+        height: 50px
+        width: 150px
+        cursor: pointer
+        margin: 20px 0
 
 .selection-list
     display: flex
@@ -30,10 +36,13 @@ $border: 2px solid #737373
         justify-content: space-between
         margin-bottom: 5px
         padding: 10px
-        border: $border
+        border: $dimensionBorder
         border-radius: 5px
     &__title
         margin: 0
+        display: inline
+        white-space: nowrap
+        overflow: hidden
     &__button
         border-radius: 50%
         // height: 20%

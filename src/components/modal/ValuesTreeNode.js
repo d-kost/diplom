@@ -1,6 +1,6 @@
 import React from 'react';
 
-const IndicatorsTreeNode = (props) => {
+const ValuesTreeNode = (props) => {
 
   const handleClick = (node) => {
     props.onNodeDownClick(node);
@@ -33,4 +33,4 @@ const IndicatorsTreeNode = (props) => {
   )
 }
 
-export default IndicatorsTreeNode;
+export default ValuesTreeNode;

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import '../../sass/Modal.sass';
-import IndicatorsTreeHolder from './IndicatorsTreeHolder';
-import ChosenIndicatorField from './ChosenIndicatorField';
+import ValuesTreeHolder from './ValuesTreeHolder';
+import ChosenValueList from './ChosenValueList';
 
-const IndicatorSelectionBox = (props) => {
+const ValuesSelectionBox = (props) => {
 
   const [chosenIndicatorList, setChosenIndicatorList] = useState(props.dimensionValues);
 
@@ -26,7 +26,7 @@ const IndicatorSelectionBox = (props) => {
   return (
     <div className="modal-window">
 
-      <IndicatorsTreeHolder
+      <ValuesTreeHolder
         tree={props.tree}
         onNodeDownClick={onIndicatorDownClick}
       />
@@ -38,7 +38,7 @@ const IndicatorSelectionBox = (props) => {
         </span>
       </div>
 
-      <ChosenIndicatorField
+      <ChosenValueList
         indicators={chosenIndicatorList}
         onDeleteClick={onIndicatorDeleteClick}
       />
@@ -65,4 +65,4 @@ const IndicatorSelectionBox = (props) => {
   )
 }
 
-export default IndicatorSelectionBox;
+export default ValuesSelectionBox;

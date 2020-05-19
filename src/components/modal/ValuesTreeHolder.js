@@ -1,14 +1,14 @@
 import React from 'react';
-import IndicatorsTree from './IndicatorsTree';
+import ValuesTree from './ValuesTree';
 
 
-const IndicatorsTreeHolder = (props) => {
+const ValuesTreeHolder = (props) => {
 
   return (
     <div className='modal-tree'>
 
       {props.tree.map(node => {
-        return (<IndicatorsTree
+        return (<ValuesTree
           key={node.ID}
           node={node}
           onNodeDownClick={props.onNodeDownClick}
@@ -19,4 +19,4 @@ const IndicatorsTreeHolder = (props) => {
   )
 }
 
-export default IndicatorsTreeHolder;
+export default ValuesTreeHolder;

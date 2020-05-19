@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import '../../sass/MeasureSelection.sass';
+import '../../sass/DimensionSelection.sass';
 import ModalPortal from '../modal/ModalPortal';
-import IndicatorSelectionBox from '../modal/IndicatorSelectionBox';
+import ValuesSelectionBox from '../modal/ValuesSelectionBox';
 import DimensionSelectionField from './DimensionSelectionField';
+import { getDimensionValuesQuery } from '../../js_modules/queryHelper';
 
 
 const DimensionSelection = (props) => {
@@ -24,7 +25,7 @@ const DimensionSelection = (props) => {
       let requests = props.dimensions.map(dimension => {
         return (
 
-          fetch(`http://localhost:8080/dim?abbr=${dimension.Abbr}`)
+          fetch(getDimensionValuesQuery(dimension.Abbr))
             .then(response => response.json())
             .then(json => {
               values = { ...values, [dimension.Abbr]: json };
@@ -84,7 +85,7 @@ const DimensionSelection = (props) => {
 
 
       {showModal && <ModalPortal>
-        <IndicatorSelectionBox
+        <ValuesSelectionBox
           tree={dimensionValues[modalAbbr]}
           onCancelClick={onModalCancelClick}
           onAcceptClick={onModalAcceptClick}

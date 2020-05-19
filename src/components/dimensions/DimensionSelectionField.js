@@ -18,7 +18,7 @@ const DimensionSelectionField = React.memo(function DimensionSelectionField(prop
 
   useEffect(() => {
     console.log('dimension selection field use effect');
-    
+
     let newDimensions = props.dimensions.slice();
     let topHeaderDefaultElement = newDimensions.splice(0, 1); //get 1st element
     let leftHeaderDefaultElement = newDimensions.splice(1, 1); //get 3rd element
@@ -119,12 +119,16 @@ const DimensionSelectionField = React.memo(function DimensionSelectionField(prop
 
       </DragDropContext>
 
-      <button
-        onClick={() => props.onApplyClick(dimensions,
-          leftHeaderDimensions, topHeaderDimensions)}
-      >
-        Apply
+      <div className='dimensions-apply'>
+        <button
+          className='dimensions-apply__button'
+          onClick={() => props.onApplyClick(dimensions,
+            leftHeaderDimensions, topHeaderDimensions)}
+        >
+          Apply
       </button>
+      </div>
+
     </>
   )
 })
