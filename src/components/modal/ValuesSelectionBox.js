@@ -5,63 +5,58 @@ import ChosenValueList from './ChosenValueList';
 
 const ValuesSelectionBox = (props) => {
 
-  const [chosenIndicatorList, setChosenIndicatorList] = useState(props.dimensionValues);
+  // const [chosenIndicatorList, setChosenIndicatorList] = useState(props.dimensionValues);
 
 
-  const onIndicatorDownClick = (node) => {
-    
-    if (!chosenIndicatorList.includes(node)) {
-      let newList = [...chosenIndicatorList, node];   
-      setChosenIndicatorList(newList);
-    }
-  }
+  // const onIndicatorDownClick = (node) => {
+
+  //   if (!chosenIndicatorList.includes(node)) {
+  //     let newList = [...chosenIndicatorList, node];
+  //     setChosenIndicatorList(newList);
+  //   }
+  // }
 
 
-  const onIndicatorDeleteClick = (id) => {
-    let newList = chosenIndicatorList.filter(indicator => indicator.ID !== id);
-    setChosenIndicatorList(newList);
-  }
+  // const onIndicatorDeleteClick = (id) => {
+  //   let newList = chosenIndicatorList.filter(indicator => indicator.ID !== id);
+  //   setChosenIndicatorList(newList);
+  // }
 
 
   return (
-    <div className="modal-window">
+    // <div className="modal-window">
 
+    <>
       <ValuesTreeHolder
         tree={props.tree}
-        onNodeDownClick={onIndicatorDownClick}
+        onNodeDownClick={props.onNodeDownClick}
       />
-
-      <div className="modal-panel">
-        <span
-          className='modal-window__button-down'
-        >
-        </span>
-      </div>
 
       <ChosenValueList
-        indicators={chosenIndicatorList}
-        onDeleteClick={onIndicatorDeleteClick}
+        indicators={props.chosenIndicatorList}
+        onDeleteClick={props.onDeleteClick}
       />
+    </>
 
-      <div className="">
-        <button
-          className='modal-window__button'
-          onClick={props.onCancelClick}
-        >
-          Cancel
-        </button>
+    //   <div className="modal-window__">
+    //     <button
+    //       className='modal-window__button'
+    //       onClick={props.onCancelClick}
+    //     >
+    //       Cancel
+    //     </button>
 
-        <button
-          className='modal-window__button'
-          onClick={() => props.onAcceptClick(chosenIndicatorList)}
-        >
-          Accept
-        </button>
-      </div>
+    //     <button
+    //       className='modal-window__button'
+    //       onClick={() => props.onAcceptClick(chosenIndicatorList)}
+    //     >
+    //       Accept
+    //     </button>
+    //   </div>
 
 
 
-    </div>
+    // </div> 
   )
 }
 

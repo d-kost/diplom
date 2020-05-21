@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../../sass/DimensionSelection.sass';
 import ModalPortal from '../modal/ModalPortal';
-import ValuesSelectionBox from '../modal/ValuesSelectionBox';
 import DimensionSelectionField from './DimensionSelectionField';
+import ModalWrapper from '../modal/ModalWrapper';
 import { getDimensionValuesQuery } from '../../js_modules/queryHelper';
 
 
@@ -84,14 +84,25 @@ const DimensionSelection = (props) => {
       />
 
 
+
       {showModal && <ModalPortal>
+        <ModalWrapper
+          onCancelClick={onModalCancelClick}
+          onAcceptClick={onModalAcceptClick}
+          tree={dimensionValues[modalAbbr]}
+          dimensionValues={chosenDimensionValues[modalAbbr]}
+        />
+      </ModalPortal>}
+
+      {/* {showModal && <ModalPortal>
+        
         <ValuesSelectionBox
           tree={dimensionValues[modalAbbr]}
           onCancelClick={onModalCancelClick}
           onAcceptClick={onModalAcceptClick}
           dimensionValues={chosenDimensionValues[modalAbbr]}
         />
-      </ModalPortal>}
+      </ModalPortal>} */}
     </>
   )
 }
