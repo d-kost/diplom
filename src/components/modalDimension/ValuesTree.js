@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ValuesTreeNode from './ValuesTreeNode';
+import PropTypes from 'prop-types';
 
 
 const ValuesTree = (props) => {
@@ -37,5 +38,9 @@ const ValuesTree = (props) => {
   )
 }
 
+ValuesTree.propTypes = {
+  node: PropTypes.object,
+  onNodeDownClick: PropTypes.func
+}
 
 export default React.memo(ValuesTree);

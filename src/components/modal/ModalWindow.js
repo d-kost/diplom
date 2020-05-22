@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const ModalWindow = (props) => {
 
@@ -25,6 +26,11 @@ const ModalWindow = (props) => {
       </div>
     </div>
   )
+}
+
+ModalWindow.propTypes = {
+  onAcceptClick: PropTypes.func,
+  onCancelClick: PropTypes.func,
 }
 
 export default ModalWindow;

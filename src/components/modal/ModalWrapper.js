@@ -1,28 +1,43 @@
-import React, { useState } from 'react';
-import ValuesSelectionBox from './ValuesSelectionBox';
-import ModalWindow from '../modal/ModalWindow';
+import React, { useState, useCallback } from 'react';
+import ValuesSelectionBox from '../modalDimension/ValuesSelectionBox';
+import ModalWindow from './ModalWindow';
+import TimeSelection from '../modalTime/TimeSelection';
+import '../../sass/Modal.sass';
+import PropTypes from 'prop-types';
+
 
 const ModalWrapper = (props) => {
 
-  const [chosenIndicatorList, setChosenIndicatorList] = useState(props.dimensionValues);
+  const [chosenValueList, setChosenValueList] = useState(props.dimensionValues);
+  const [chosenTime, setChosenTime] = useState(props.chosenTimeValue);
 
-  const onIndicatorDownClick = (node) => {
-
-    if (!chosenIndicatorList.includes(node)) {
-      let newList = [...chosenIndicatorList, node];
-      setChosenIndicatorList(newList);
+  const onValueDownClick = (node) => {
+    if (!chosenValueList.includes(node)) {
+      let newList = [...chosenValueList, node];
+      setChosenValueList(newList);
     }
   }
 
 
-  const onIndicatorDeleteClick = (id) => {
-    let newList = chosenIndicatorList.filter(indicator => indicator.ID !== id);
-    setChosenIndicatorList(newList);
+  const onValueDeleteClick = (id) => {
+    let newList = chosenValueList.filter(indicator => indicator.ID !== id);
+    setChosenValueList(newList);
   }
+
+  const changeChosenTime = useCallback((newTime) => {
+    setChosenTime(newTime);
+  }, []);
+
+
 
 
   const onAcceptClick = () => {
-    props.onAcceptClick(chosenIndicatorList);
+    console.log('newTime', chosenTime);
+    if (props.modalAbbr === 'T') {
+
+    } else {
+      props.onAcceptClick(chosenValueList, chosenTime);
+    }
   }
 
 
@@ -31,15 +46,32 @@ const ModalWrapper = (props) => {
       onAcceptClick={onAcceptClick}
       onCancelClick={props.onCancelClick}
     >
-      <ValuesSelectionBox
-        tree={props.tree}
-        dimensionValues={props.dimensionValues}
-        onNodeDownClick={onIndicatorDownClick}
-        onDeleteClick={onIndicatorDeleteClick}
-        chosenIndicatorList={chosenIndicatorList}
-      />
+
+      {props.modalAbbr === 'T' ?
+        <TimeSelection
+          chosenTimeValue={chosenTime}
+          changeChosenTime={changeChosenTime}
+        />
+        :
+        <ValuesSelectionBox
+          tree={props.tree}
+          onNodeDownClick={onValueDownClick}
+          onDeleteClick={onValueDeleteClick}
+          chosenValueList={chosenValueList}
+        />
+      }
+
     </ModalWindow>
   )
+}
+
+ModalWrapper.propTypes = {
+  onCancelClick: PropTypes.func,
+  onAcceptClick: PropTypes.func,
+  modalAbbr: PropTypes.string,
+  tree: PropTypes.arrayOf(PropTypes.object),
+  dimensionValues: PropTypes.arrayOf(PropTypes.object),
+  chosenTimeValue: PropTypes.object
 }
 
 export default ModalWrapper;

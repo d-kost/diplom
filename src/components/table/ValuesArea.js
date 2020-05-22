@@ -1,28 +1,28 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import ValuesAreaCell from "./ValuesAreaCell";
 import '../../sass/ValuesArea.sass';
 import PropTypes from 'prop-types';
 
-class ValuesArea extends Component {
+class ValuesArea extends PureComponent {
 
   render() {
     return (
       <div className="field">
-
-        {this.props.leftHeaderKeys.map(keyLeftList => {
+        {console.log('ValuesArea begin render')}
+        {this.props.leftHeaderKeys.map((keyLeftList, i) => {
           return (
-            <div className="field__row" key={keyLeftList}>
-              {this.props.topHeaderKeys.map(keyTopList => {
+            <div className="field__row" key={keyLeftList + ' ' + i}>
+              {this.props.topHeaderKeys.map((keyTopList, j) => {
 
                 let key = `${keyLeftList.join(' ')} ${keyTopList.join(' ')}`;
                 // console.log('values area key', key);
-                
 
+                let cellKey = `${key} ${i} ${j}`;
                 let value = this.props.obtainedValues.get(key);
                 // console.log('values area value', value);
                 return (
                   <ValuesAreaCell
-                    key={keyTopList}
+                    key={cellKey}
                     value={value}
                   />
                 )

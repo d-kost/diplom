@@ -4,6 +4,7 @@ import ModalPortal from '../modal/ModalPortal';
 import DimensionSelectionField from './DimensionSelectionField';
 import ModalWrapper from '../modal/ModalWrapper';
 import { getDimensionValuesQuery } from '../../js_modules/queryHelper';
+import { initialTime } from '../../js_modules/timeData';
 
 
 const DimensionSelection = (props) => {
@@ -13,6 +14,8 @@ const DimensionSelection = (props) => {
 
   const [dimensionValues, setDimensionValues] = useState({});
   const [chosenDimensionValues, setDimensionChosenValues] = useState({});
+
+  const [chosenTimeValue, setChosenTimeValue] = useState(initialTime);
 
 
   useEffect(() => {
@@ -50,21 +53,25 @@ const DimensionSelection = (props) => {
   }, [props.dimensions])
 
 
-
   const onOpenModal = (abbr) => {
     setModalAbbr(abbr);
     setShowModal(true);
   }
 
 
-  const onModalAcceptClick = (values) => {
+  const onModalAcceptClick = (values, chosenTime) => {
+    //set chosenTimeValue
     setDimensionChosenValues({ ...chosenDimensionValues, [modalAbbr]: values });
-    setModalAbbr(null);
-    setShowModal(false);
+    closeModal();
   }
 
 
   const onModalCancelClick = () => {
+    closeModal();
+  }
+
+
+  const closeModal = () => {
     setModalAbbr(null);
     setShowModal(false);
   }
@@ -73,6 +80,7 @@ const DimensionSelection = (props) => {
   const onApplyClick = (singleValues, leftHeader, topHeader) => {
     props.onApplyClick(singleValues, leftHeader, topHeader, chosenDimensionValues);
   }
+
 
   return (
     <>
@@ -83,26 +91,17 @@ const DimensionSelection = (props) => {
         onApplyClick={onApplyClick}
       />
 
-
-
       {showModal && <ModalPortal>
         <ModalWrapper
           onCancelClick={onModalCancelClick}
           onAcceptClick={onModalAcceptClick}
+          modalAbbr={modalAbbr}
           tree={dimensionValues[modalAbbr]}
           dimensionValues={chosenDimensionValues[modalAbbr]}
+          chosenTimeValue={chosenTimeValue}
         />
       </ModalPortal>}
 
-      {/* {showModal && <ModalPortal>
-        
-        <ValuesSelectionBox
-          tree={dimensionValues[modalAbbr]}
-          onCancelClick={onModalCancelClick}
-          onAcceptClick={onModalAcceptClick}
-          dimensionValues={chosenDimensionValues[modalAbbr]}
-        />
-      </ModalPortal>} */}
     </>
   )
 }

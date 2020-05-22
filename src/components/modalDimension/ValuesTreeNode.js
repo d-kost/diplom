@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const ValuesTreeNode = (props) => {
 
@@ -31,6 +32,13 @@ const ValuesTreeNode = (props) => {
         </div>
     </div>
   )
+}
+
+ValuesTreeNode.propTypes = {
+  node: PropTypes.object,
+  onSwitchClick: PropTypes.func,
+  isOpened: PropTypes.bool,
+  onNodeDownClick: PropTypes.func
 }
 
 export default ValuesTreeNode;

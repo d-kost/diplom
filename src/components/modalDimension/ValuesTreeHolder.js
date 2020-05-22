@@ -1,5 +1,6 @@
 import React from 'react';
 import ValuesTree from './ValuesTree';
+import PropTypes from 'prop-types';
 
 
 const ValuesTreeHolder = (props) => {
@@ -17,6 +18,11 @@ const ValuesTreeHolder = (props) => {
 
     </div>
   )
+}
+
+ValuesTreeHolder.propTypes = {
+  tree: PropTypes.arrayOf(PropTypes.object),
+  onNodeDownClick: PropTypes.func
 }
 
 export default ValuesTreeHolder;
