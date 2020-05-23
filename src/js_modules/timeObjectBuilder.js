@@ -1,4 +1,5 @@
 import * as timeData from './timeData';
+import { getId } from './timeCoding';
 
 export const getChosenTimeObject = (chosenTimeValue) => {
 
@@ -22,7 +23,7 @@ const getLevel = (chosenTimeValue, id, checkboxVals) => {
   for (let year = yearFrom; year <= yearTo; year++) {
     //id === 0 is year
     if (id === 0) {
-      let timeObject = createTimeObject(id, year);
+      let timeObject = createTimeObject(id, year, year);
 
       if (checkboxVals.length > 0) {
         let [nextId, checkbox] = extractNextId(checkboxVals);
@@ -57,7 +58,8 @@ const periodLevel = (id, checkboxVals, year, limits) => {
   let result = [];
 
   for (let period = limits[0]; period <= limits[1]; period++) {
-    let timeObject = createTimeObject(id, period);
+
+    let timeObject = createTimeObject(id, period, year);
 
     if (checkboxVals.length > 0) {
       let [nextId, checkbox] = extractNextId(checkboxVals);
@@ -72,11 +74,23 @@ const periodLevel = (id, checkboxVals, year, limits) => {
 }
 
 
-const createTimeObject = (id, period) => {
+const createTimeObject = (id, period, year) => {
   let timeObject = {};
-  timeObject.ID = id; //по формуле
+  let periodData = timeData.getPeriodById(id);
 
-  let periodName = timeData.getPeriodById(id).Name;
+  let monthNumber;
+  if (id === 0) {
+    monthNumber = 0;
+  } else if (id === 3) {
+    monthNumber = period;
+  } else {
+    let duration = periodData.duration;
+    monthNumber = period * duration - duration;
+  }
+
+  timeObject.ID = getId(year, monthNumber, periodData.duration);
+
+  let periodName = periodData.Name;
   timeObject.Name = `${period} ${periodName}`;
 
   return timeObject;
