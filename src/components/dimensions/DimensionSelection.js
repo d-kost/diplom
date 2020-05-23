@@ -4,7 +4,8 @@ import ModalPortal from '../modal/ModalPortal';
 import DimensionSelectionField from './DimensionSelectionField';
 import ModalWrapper from '../modal/ModalWrapper';
 import { getDimensionValuesQuery } from '../../js_modules/queryHelper';
-import { initialTime } from '../../js_modules/timeData';
+import * as timeData from '../../js_modules/timeData';
+import { getChosenTimeObject } from '../../js_modules/timeObjectBuilder';
 
 
 const DimensionSelection = (props) => {
@@ -15,7 +16,7 @@ const DimensionSelection = (props) => {
   const [dimensionValues, setDimensionValues] = useState({});
   const [chosenDimensionValues, setDimensionChosenValues] = useState({});
 
-  const [chosenTimeValue, setChosenTimeValue] = useState(initialTime);
+  const [chosenTimeValue, setChosenTimeValue] = useState(timeData.initialTime);
 
 
   useEffect(() => {
@@ -59,9 +60,13 @@ const DimensionSelection = (props) => {
   }
 
 
-  const onModalAcceptClick = (values, chosenTime) => {
+  const onModalAcceptClick = (values) => {
     //set chosenTimeValue
-    setDimensionChosenValues({ ...chosenDimensionValues, [modalAbbr]: values });
+    if (modalAbbr === 'T') {
+      setChosenTimeValue(values);
+    } else {
+      setDimensionChosenValues({ ...chosenDimensionValues, [modalAbbr]: values });
+    }
     closeModal();
   }
 
@@ -78,7 +83,16 @@ const DimensionSelection = (props) => {
 
 
   const onApplyClick = (singleValues, leftHeader, topHeader) => {
-    props.onApplyClick(singleValues, leftHeader, topHeader, chosenDimensionValues);
+    //добавить время в chosen в правильном виде
+    //chosenDimensionValues[T] = [{...}];
+    let timeObject = getChosenTimeObject(chosenTimeValue);
+    let values = {
+      ...chosenDimensionValues,
+      'T': timeObject
+    }
+    //надо ли обновлять chosenDimensionValues ?
+
+    props.onApplyClick(singleValues, leftHeader, topHeader, values);
   }
 
 

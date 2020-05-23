@@ -1,19 +1,23 @@
 export const periodList = [
   {
     ID: 0,
-    Name: 'Год'
+    Name: 'Год',
+    duration: 12
   },
   {
     ID: 1,
-    Name: 'Полугодие'
+    Name: 'Полугодие',
+    duration: 6
   },
   {
     ID: 2,
-    Name: 'Квартал'
+    Name: 'Квартал',
+    duration: 3
   },
   {
     ID: 3,
-    Name: 'Месяц'
+    Name: 'Месяц',
+    duration: 1
   },
 ]
 

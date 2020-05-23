@@ -29,14 +29,13 @@ const ModalWrapper = (props) => {
   }, []);
 
 
-
-
   const onAcceptClick = () => {
-    console.log('newTime', chosenTime);
     if (props.modalAbbr === 'T') {
-
+      //составить структуру данных для времени в chosenValueList
+      // console.log('getChosenTimeObject', getChosenTimeObject());
+      props.onAcceptClick(chosenTime);
     } else {
-      props.onAcceptClick(chosenValueList, chosenTime);
+      props.onAcceptClick(chosenValueList);
     }
   }
 

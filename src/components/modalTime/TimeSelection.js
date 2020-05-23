@@ -7,8 +7,14 @@ import PropTypes from 'prop-types';
 const TimeSelection = (props) => {
 
   const onChangePeriod = (id) => {
-    let newTime = { ...props.chosenTimeValue, periodId: id };
+    let newTime = {
+      ...props.chosenTimeValue,
+      periodId: id,
+      chosenPeriodFrom: timeData.periodValue[id].min,
+      chosenPeriodTo: timeData.periodValue[id].max
+    };
     //изменяеть границы From и To
+
     props.changeChosenTime(newTime);
   }
 
@@ -20,7 +26,7 @@ const TimeSelection = (props) => {
       let index = checkbox.indexOf(id);
       checkbox.splice(index, 1);
     }
-    
+
 
     let newTime = { ...props.chosenTimeValue, checkboxVals: checkbox }
     props.changeChosenTime(newTime);
@@ -56,7 +62,7 @@ const TimeSelection = (props) => {
 
   const changeChosenPeriodFrom = (value) => {
     console.log('changeChosenPeriodFrom', value);
-    
+
     value = parseInt(value);
     let chosenPeriodTo = props.chosenTimeValue.chosenPeriodTo;
 
