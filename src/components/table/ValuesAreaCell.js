@@ -1,19 +1,20 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import PropTypes from 'prop-types';
 
-export default class ValuesAreaCell extends PureComponent {
+const ValuesAreaCell = (props) => {
 
-  render() {
-    return (
-      <div className="field__cell cell-width cell-height">
-        {console.log('ValuesAreaCell render')}
-        {this.props.value}
-      </div>
-    )
-  }
+
+  return (
+    <div className="field__cell cell-width cell-height">
+      {console.log('ValuesAreaCell render')}
+      {props.value}
+    </div>
+  )
+
 }
 
 ValuesAreaCell.propTypes = {
-  vNode: PropTypes.string,
-  hNode: PropTypes.string
+  value: PropTypes.number
 }
+
+export default React.memo(ValuesAreaCell);

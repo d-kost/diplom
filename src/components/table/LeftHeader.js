@@ -25,7 +25,7 @@ export default class LeftHeader extends Component {
   render() {
     return (
       <div className="data-table__left-header">
-        {console.log('render LeftHeader', this.props.headerTree)}
+        {/* {console.log('render LeftHeader', this.props.headerTree)} */}
 
         {this.props.headerTree[0] &&
           this.props.headerTree.map(node =>

@@ -12,9 +12,9 @@
     font-size: 14px
     // margin-left: 10px
     width: fit-content
-    max-width: 1200px
+    max-width: $maxTableWidth
     // max-height: 500px
-    max-height: 500px
+    max-height: $maxTableHeight
     overflow: scroll
     &__top-header
         @extend %head-side
@@ -43,11 +43,11 @@
 
 .cell
     &-width
-        min-width: 130px
-        max-width: 130px
+        min-width: $cellWidth
+        max-width: $cellWidth
     &-height
-        min-height: 60px
-        max-height: 60px
+        min-height: $cellHeight
+        max-height: $cellHeight
 
 
 .empty-block

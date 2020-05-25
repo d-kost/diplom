@@ -49,8 +49,8 @@ const periodId = 0;
 export const initialTime = {
   periodId: periodId,
   checkboxVals: [periodId],
-  yearFrom: periodValue[periodId].min,
-  yearTo: periodValue[periodId].min,
+  yearFrom: 2001,
+  yearTo: 2001,
   chosenPeriodFrom: 0,
   chosenPeriodTo: 0
 }

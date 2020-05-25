@@ -25,7 +25,7 @@ function MainComponent() {
     let queryParams = {
       topHdr: [],
       leftHdr: [],
-      values: []
+      values: {}
     }
 
     queryParams.leftHdr = queryHelper.createQueryHdr(leftH);
