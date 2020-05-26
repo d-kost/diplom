@@ -3,28 +3,12 @@ import HeaderCell from './HeaderCell';
 import PropTypes from 'prop-types';
 
 export default class LeftHeader extends Component {
-  constructor(props) {
-    super(props);
-
-    this.resizeEmptyBlock = this.resizeEmptyBlock.bind(this);
-  }
-
-
-  resizeEmptyBlock() {
-    // ref?????        
-    let verticalWidth = document.querySelector('.data-table__left-header').clientWidth;
-    let emptyBlock = document.querySelector('.empty-block');
-
-    if (verticalWidth !== emptyBlock.clientWidth) {
-      emptyBlock.style.minWidth = verticalWidth + 'px';
-    }
-  }
-
 
 
   render() {
     return (
-      <div className="data-table__left-header">
+      // <div className="data-table__left-header">
+      <>
         {/* {console.log('render LeftHeader', this.props.headerTree)} */}
 
         {this.props.headerTree[0] &&
@@ -36,12 +20,12 @@ export default class LeftHeader extends Component {
               isVertical={true}
               headerTree={this.props.headerTree}
               openBtnClick={this.props.openBtnClick}
-              resizeEmptyBlock={this.resizeEmptyBlock}
+              resizeEmptyBlock={this.props.resizeEmptyBlock}
             />
 
           )}
-        
-      </div>
+      </>
+      /* </div> */
     )
   }
 }

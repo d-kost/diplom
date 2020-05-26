@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import '../../sass/DataTable.sass';
 import TopHeader from './TopHeader';
 import LeftHeader from './LeftHeader';
@@ -21,6 +21,9 @@ const DataTable = (props) => {
   const [queryParams, setQueryParams] = useState({});
 
   const [scrollData, setScrollData] = useState({});
+
+  const emptyBlockRef = useRef(null);
+  const leftHeaderRef = useRef(null);
 
 
   const getKeysFromHeader = useCallback((header) => {
@@ -76,8 +79,8 @@ const DataTable = (props) => {
 
 
     let query = queryHelper.getDataTableQuery(newQueryParams);
-    
-    
+
+
 
     if (newQueryValues.length !== 0) {
       fetch(query)
@@ -128,13 +131,24 @@ const DataTable = (props) => {
 
   }
 
+  const resizeEmptyBlock = () => {       
+    // let verticalWidth = document.querySelector('.data-table__left-header').clientWidth;
+    let verticalWidth = leftHeaderRef.current.clientWidth;
+    // let emptyBlock = document.querySelector('.empty-block');
+    console.log('resizeEmptyBlock');
+
+    if (verticalWidth !== emptyBlockRef.current.clientWidth) {
+      emptyBlockRef.current.style.minWidth = verticalWidth + 'px';
+    }
+  }
+
 
   return (
     <div className="data-table" onScroll={onScroll}>
 
       {/* {console.log('topHeaderTree', topHeaderTree)} */}
       <div className='data-table__top-header-wrapper'>
-        <div className="empty-block"></div>
+        <div className="empty-block" ref={emptyBlockRef}></div>
         <TopHeader
           headerTree={topHeaderTree}
           openBtnClick={openBtnClick}
@@ -142,10 +156,13 @@ const DataTable = (props) => {
       </div>
 
       <div className="data-table__content-wrapper">
-        <LeftHeader
-          headerTree={leftHeaderTree}
-          openBtnClick={openBtnClick}
-        />
+        <div className="data-table__left-header" ref={leftHeaderRef}>
+          <LeftHeader
+            headerTree={leftHeaderTree}
+            openBtnClick={openBtnClick}
+            resizeEmptyBlock={resizeEmptyBlock}
+          />
+        </div>
 
         <ValuesArea
           hashTable={hashTable}
