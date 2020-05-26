@@ -2,19 +2,16 @@ import React, { useEffect } from 'react';
 import Panel from './Panel';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { useState } from 'react';
+import { panelsData } from '../../js_modules/dimensionPanelsInfo';
+import PropTypes from 'prop-types';
 
 
-const DimensionSelectionField = React.memo(function DimensionSelectionField(props) {
+const DimensionSelectionField = React.memo((props) => {
 
   const [dimensions, setDimensions] = useState([]);
   const [leftHeaderDimensions, setLeftHeaderDimensions] = useState([]);
   const [topHeaderDimensions, setTopHeaderDimensions] = useState([]);
 
-  const headerIds = {
-    common: '1',
-    left: '2',
-    top: '3'
-  }
 
   useEffect(() => {
     console.log('dimension selection field use effect');
@@ -73,11 +70,11 @@ const DimensionSelectionField = React.memo(function DimensionSelectionField(prop
 
   const getListById = (id) => {
     switch (id) {
-      case headerIds.common: return [dimensions.slice(), setDimensions];
+      case panelsData.common.id: return [dimensions.slice(), setDimensions];
 
-      case headerIds.left: return [leftHeaderDimensions.slice(), setLeftHeaderDimensions];
+      case panelsData.left.id: return [leftHeaderDimensions.slice(), setLeftHeaderDimensions];
 
-      case headerIds.top: return [topHeaderDimensions.slice(), setTopHeaderDimensions];
+      case panelsData.top.id: return [topHeaderDimensions.slice(), setTopHeaderDimensions];
       default: return [null, null];
     }
   }
@@ -88,8 +85,7 @@ const DimensionSelectionField = React.memo(function DimensionSelectionField(prop
         <div className="measure-selection">
 
           <Panel
-            id={headerIds.common}
-            type='single'
+            data={panelsData.common}
             dimensions={dimensions}
             onOpenModal={props.onOpenModal}
             dimensionValues={props.dimensionValues}
@@ -98,8 +94,7 @@ const DimensionSelectionField = React.memo(function DimensionSelectionField(prop
 
 
           <Panel
-            id={headerIds.left}
-            type='left'
+            data={panelsData.left}
             dimensions={leftHeaderDimensions}
             onOpenModal={props.onOpenModal}
             dimensionValues={props.dimensionValues}
@@ -107,8 +102,7 @@ const DimensionSelectionField = React.memo(function DimensionSelectionField(prop
           </Panel>
 
           <Panel
-            id={headerIds.top}
-            type='top'
+            data={panelsData.top}
             dimensions={topHeaderDimensions}
             onOpenModal={props.onOpenModal}
             dimensionValues={props.dimensionValues}
@@ -132,6 +126,13 @@ const DimensionSelectionField = React.memo(function DimensionSelectionField(prop
     </>
   )
 })
+
+DimensionSelectionField.propTypes = {
+  dimensions: PropTypes.arrayOf(PropTypes.object),
+  onOpenModal: PropTypes.func,
+  dimensionValues: PropTypes.objectOf(PropTypes.array),
+  onApplyClick: PropTypes.func
+}
 
 export default DimensionSelectionField;
 

@@ -14,7 +14,7 @@ const createLevel = (level, header, values, parentIndexes) => {
     //item : {ID, Name, Children}
     let newItem = JSON.parse(JSON.stringify(item));
     //open first level
-    newItem.isOpened = level === 0 ? true : false;
+    newItem.isOpened = level === 0 && newItem.Children ? true : false;
     newItem.Abbr = header[level].Abbr;
 
     if (parentIndexes.length > 0) {

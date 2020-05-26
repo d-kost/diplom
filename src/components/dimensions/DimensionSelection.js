@@ -6,6 +6,7 @@ import ModalWrapper from '../modal/ModalWrapper';
 import { getDimensionValuesQuery } from '../../js_modules/queryHelper';
 import * as timeData from '../../js_modules/timeData';
 import { getChosenTimeObject } from '../../js_modules/timeObjectBuilder';
+import PropTypes from 'prop-types';
 
 
 const DimensionSelection = (props) => {
@@ -92,7 +93,10 @@ const DimensionSelection = (props) => {
     }
     //надо ли обновлять chosenDimensionValues ?
 
-    props.onApplyClick(singleValues, leftHeader, topHeader, values);
+    if (leftHeader.length !== 0 && topHeader.length !== 0) {
+      props.onApplyClick(singleValues, leftHeader, topHeader, values);
+    }
+    
   }
 
 
@@ -118,6 +122,11 @@ const DimensionSelection = (props) => {
 
     </>
   )
+}
+
+DimensionSelection.propTypes = {
+  dimensions: PropTypes.arrayOf(PropTypes.object),
+  onApplyClick: PropTypes.func
 }
 
 export default DimensionSelection;

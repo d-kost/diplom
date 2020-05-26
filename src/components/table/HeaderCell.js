@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import '../../sass/HeadCell.sass';
+import '../../sass/HeaderCell.sass';
 import OpenBtn from "./OpenBtn";
 import PropTypes from 'prop-types';
 
@@ -29,19 +29,31 @@ class HeaderCell extends PureComponent {
 
 
   generateNodeClass() {
-    const nodeClass = [];
-    nodeClass.push(...this.generateClass("node"));
+    let nodeClass = [];
+    const isEnding = !this.props.node.isOpened && !this.props.node.nextLevel;
 
+    if (!isEnding) {
+      nodeClass.push(...this.generateClass("node"));
+    } else {
+      nodeClass.push('node');
+    }
+    nodeClass.push(this.props.isVertical ? 'node--border-bottom' : 'node--border-right');
+
+
+    // if (!this.props.isVertical &&
+    //   !this.props.node.isOpened &&
+    //   !this.props.node.nextLevel) {
     if (!this.props.isVertical &&
-      !this.props.node.isOpened &&
-      !this.props.node.nextLevel) {
+      isEnding) {
 
       nodeClass.push("cell-width");
     }
 
+    // if (this.props.isVertical &&
+    //   !this.props.node.isOpened &&
+    //   !this.props.node.nextLevel) {
     if (this.props.isVertical &&
-      !this.props.node.isOpened &&
-      !this.props.node.nextLevel) {
+      isEnding) {
 
       nodeClass.push("cell-height");
     }
@@ -59,6 +71,21 @@ class HeaderCell extends PureComponent {
       resultClass.push(`${sourceClass}--top`);
     }
     return resultClass;
+  }
+
+
+  generateNodeTextClass() {
+    let textClass = ['node__text'];
+
+    let needsLimit = (this.props.node.Children && this.props.node.Children.length === 1) ||
+    (this.props.node.nextLevel && this.props.node.nextLevel.length === 1);
+
+    if (needsLimit && this.props.isVertical) {
+      textClass.push('limit-height');
+    }
+
+    return textClass;
+
   }
 
 
@@ -83,6 +110,8 @@ class HeaderCell extends PureComponent {
     const wrapperClass = this.generateClass("node__wrapper");
     const node_container = this.generateClass("node__container");
 
+    const nodeTextClass = this.generateNodeTextClass();
+
     const hasChildren = this.props.node.Children && this.props.node.Children.length > 0;
 
 
@@ -102,7 +131,7 @@ class HeaderCell extends PureComponent {
             />}
 
           {/* {console.log('render head cell')} */}
-          <p className="node__text">
+          <p className={nodeTextClass.join(' ')}>
             {this.props.node.ID} {this.props.node.Name}
           </p>
         </div>

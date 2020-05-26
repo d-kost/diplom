@@ -8,6 +8,10 @@ $maxTableHeight: 500px;
 $cellWidth: 130px;
 $cellHeight: 60px;
 
+$cellPadding: 5px;
+
+$textHeight: calc(#{$cellHeight} - #{$cellPadding * 2});
+
 :export {
     cellWidth: $cellWidth;
     cellHeight: $cellHeight;

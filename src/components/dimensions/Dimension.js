@@ -1,14 +1,15 @@
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import PropTypes from 'prop-types';
 
 
-const Dimension = React.memo(function Dimension(props) {
+const Dimension = React.memo((props) => {
 
   const getValuesString = () => {
     if (props.dimensionValue) {
       return props.dimensionValue.map(value => value ? value.ID : '')
     } else {
-      return '';
+      return [];
     }
   }
 
@@ -25,14 +26,12 @@ const Dimension = React.memo(function Dimension(props) {
         >
 
           {/* {console.log('render li', props.dimensionValue)} */}
-          
+
           <p
             className='selection-list__title'
             title={getValuesString()}
           >
-            {props.dimension.RName}  {props.dimensionValue
-              && getValuesString().join(' ')}
-            {/* { && props.dimensionValue.map(value => value ? `${value.ID} ` : '')} */}
+            {props.dimension.RName}  {getValuesString().join(' ')}
           </p>
 
           <button
@@ -50,5 +49,16 @@ const Dimension = React.memo(function Dimension(props) {
   )
 });
 
+
+Dimension.propTypes = {
+  dimension: PropTypes.shape({
+    id: PropTypes.number,
+    RName: PropTypes.string,
+    Abbr: PropTypes.string,
+  }),
+  index: PropTypes.number,
+  onOpenModal: PropTypes.func,
+  dimensionValue: PropTypes.arrayOf(PropTypes.object)
+}
 
 export default Dimension;
