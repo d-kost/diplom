@@ -22,8 +22,7 @@ export const getDimensionValuesQuery = (abbr) => {
 
 
 const createQueryValues = (values) => {
-  console.log('create query values');
-  
+
   let valuesString = '';
 
   for (const key in values) {
@@ -39,13 +38,47 @@ const createQueryValues = (values) => {
   return valuesString;
 }
 
-export const getHashTable = (valsArray, resultMap = new Map()) => {
+
+export const getHashTable = (valsArray, existingMap) => {
+  if (existingMap) {
+    existingMap = new Map(existingMap);
+  } else {
+    existingMap = new Map();
+  }
 
   valsArray.forEach(nestedArray => {
     let value = nestedArray.shift();
-    resultMap.set(nestedArray.join(' '), value);
+    existingMap.set(nestedArray.join(' '), value);
   })
 
-  return resultMap;
+  return existingMap;
+}
+
+
+export const getAllDimensionsValuesIds = (values) => {
+  let valuesIds = {};
+
+  for (const key in values) {
+    if (values.hasOwnProperty(key)) {
+      valuesIds[[key]] =
+        values[key].map(value => value ? value.ID : null);
+    }
+  }
+
+  return valuesIds;
+}
+
+
+export const getListValues = (nodeList, abbr, queryParamsValues) => {
+  let values = [];
+
+  nodeList.forEach(node => {
+    // if (!queryParams.values[abbr].includes(node.ID)) {
+    if (!queryParamsValues[abbr].includes(node.ID)) {
+      values.push(node.ID);
+    }
+  });
+
+  return values;
 }
 

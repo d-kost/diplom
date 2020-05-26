@@ -31,41 +31,52 @@ function MainComponent() {
     queryParams.leftHdr = queryHelper.createQueryHdr(leftH);
     queryParams.topHdr = queryHelper.createQueryHdr(topH);
 
-    queryParams.values = getValuesIds(values);//.map(value => value.ID);
+    queryParams.values = queryHelper.getAllDimensionsValuesIds(values);//.map(value => value.ID);
+
     // queryParams.values = queryHelper.createQueryValues(values);
+    let topTree = createHeaderTree(topH, values);
+    let leftTree = createHeaderTree(leftH, values);
+
+    queryParams.values = getChildrenValues(topTree, queryParams.values);
+    queryParams.values = getChildrenValues(leftTree, queryParams.values);
+
+
+    // leftTree.forEach(a => {
+    //   if (a.isOpened) {
+    //     queryParams.values[a.Abbr].push(...getQueryValues(a.Children, a.Abbr, queryParams));
+    //   }
+    // });
 
     let query = queryHelper.getDataTableQuery(queryParams);
-
     console.log('query', query);
-
 
     fetch(query)
       .then(response => response.json())
       .then(json => {
-        let hashTable = queryHelper.getHashTable(json); 
+        let hashTable = queryHelper.getHashTable(json);
         setObtainedValuesForValuesArea(hashTable);
 
-        setTopHeaderTree(createHeaderTree(topH, values));
-        setLeftHeaderTree(createHeaderTree(leftH, values));
+        setTopHeaderTree(topTree);
+        setLeftHeaderTree(leftTree);
 
         setQueryParams(queryParams);
       })
 
   }
 
-  const getValuesIds = (values) => {
-    let valuesIds = {};
 
-    for (const key in values) {
-      if (values.hasOwnProperty(key)) {
-        valuesIds[[key]] =
-        values[key].map(value => value ? value.ID : null);
+  const getChildrenValues = (tree, paramValues) => {
+    // let result = [];
+    tree.forEach(node => {
+      if (node.isOpened && node.Children) {
+        paramValues[node.Abbr].push(
+          ...queryHelper.getListValues(node.Children, node.Abbr, paramValues)
+        );
       }
-    }
+    });
 
-    return valuesIds;
+    return paramValues;
   }
-
 
 
   return (
@@ -81,7 +92,7 @@ function MainComponent() {
         <DataTable
           topHeaderTree={topHeaderTree}
           leftHeaderTree={leftHeaderTree}
-          obtainedValues={obtainedValuesForValuesArea}
+          hashTable={obtainedValuesForValuesArea}
           queryParams={queryParams}
         />}
     </div>

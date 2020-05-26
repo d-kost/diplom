@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import * as queryHelper from '../../js_modules/queryHelper';
 import { changeHeader } from '../../js_modules/tableHeaderHelper';
 import sassVars from '../../sass/_vars.scss';
+import { buildKeys } from '../../js_modules/keyBuilder';
 
 const DataTable = (props) => {
 
@@ -16,46 +17,15 @@ const DataTable = (props) => {
   const [topHeaderKeys, setTopHeaderKeys] = useState([]);
   const [leftHeaderKeys, setLeftHeaderKeys] = useState([]);
 
-  const [obtainedValues, setObtainedValues] = useState();
+  const [hashTable, setHashTable] = useState();
   const [queryParams, setQueryParams] = useState({});
 
   const [scrollData, setScrollData] = useState({});
 
-  const processNextLevel = useCallback((level, prevIds, result) => {
-    let ids = [];
-
-    level.forEach(node => {
-
-      if (!node.isOpened) {
-        ids = [...prevIds, node.ID];
-
-        if (node.nextLevel) {
-          //go to nextLevel
-          processNextLevel(node.nextLevel, ids, result);
-
-        } else {
-          //end node
-          result.push(ids);
-        }
-
-      } else {
-
-        ids = prevIds;
-        if (node.Children) {
-          //go to Children
-          processNextLevel(node.Children, ids, result);
-        }
-      }
-    })
-  }, [])
-
 
   const getKeysFromHeader = useCallback((header) => {
-    let keys = [];
-    processNextLevel(header, [], keys);
-
-    return keys;
-  }, [processNextLevel])
+    return buildKeys(header);
+  }, [])
 
 
   useEffect(() => {
@@ -68,7 +38,7 @@ const DataTable = (props) => {
 
     setTopHeaderTree(props.topHeaderTree);
     setLeftHeaderTree(props.leftHeaderTree);
-    setObtainedValues(props.obtainedValues);
+    setHashTable(props.hashTable);
 
     setQueryParams(props.queryParams);
 
@@ -80,7 +50,7 @@ const DataTable = (props) => {
 
   },
     [props.topHeaderTree, props.leftHeaderTree,
-      getKeysFromHeader, props.queryParams, props.obtainedValues]
+      getKeysFromHeader, props.queryParams, props.hashTable]
   )
 
 
@@ -93,51 +63,50 @@ const DataTable = (props) => {
     let changedHeader = changeHeader(path, newHeader);
     let keys = getKeysFromHeader(changedHeader.header);
 
-
     let newQueryParams = Object.assign({}, queryParams);
+    let newQueryValues = [];
 
     //if isOpened add children ids to queryParams values
     if (changedHeader.isOpened) {
-
-      newQueryParams.values[changedHeader.Abbr].push(
-        ...getQueryValues(node.Children, changedHeader.Abbr)
-      );
-
+      //сделать так, чтобы запрос формировался не для всех значений
+      //а только для новых из текущего заголовка + для всех из противоположного
+      newQueryValues = queryHelper.getListValues(node.Children, changedHeader.Abbr, newQueryParams.values);
+      newQueryParams.values[changedHeader.Abbr].push(...newQueryValues);
     }
 
 
     let query = queryHelper.getDataTableQuery(newQueryParams);
-    //делать fetch только если изменилось что-то там...
-    fetch(query)
-      .then(response => response.json())
-      .then(json => {
-        queryHelper.getHashTable(json, obtainedValues);
+    
+    
 
-        if (isTop) {
-          setLeftHeaderTree(changedHeader.header);
-          setLeftHeaderKeys(keys);
-        } else {
-          setTopHeaderTree(changedHeader.header);
-          setTopHeaderKeys(keys);
-        }
+    if (newQueryValues.length !== 0) {
+      fetch(query)
+        .then(response => response.json())
+        .then(json => {
+          let newHashTable = queryHelper.getHashTable(json, hashTable);
+          setHashTable(newHashTable)
+          console.log('query', query);
 
-        setQueryParams(newQueryParams);
+          updateState(isTop, changedHeader.header, keys);
+          setQueryParams(newQueryParams);
+        })
 
-      })
+    } else {
+      updateState(isTop, changedHeader.header, keys);
+    }
   }
 
 
-  const getQueryValues = (nodeList, abbr) => {
-    let values = [];
-
-    nodeList.forEach(node => {
-      if (!queryParams.values[abbr].includes(node.ID)) {
-        values.push(node.ID);
-      }
-    });
-
-    return values;
+  const updateState = (isTop, header, keys) => {
+    if (isTop) {
+      setLeftHeaderTree(header);
+      setLeftHeaderKeys(keys);
+    } else {
+      setTopHeaderTree(header);
+      setTopHeaderKeys(keys);
+    }
   }
+
 
 
   const cellWidth = parseInt(sassVars.cellWidth, 10);
@@ -179,7 +148,7 @@ const DataTable = (props) => {
         />
 
         <ValuesArea
-          obtainedValues={obtainedValues}
+          hashTable={hashTable}
           topHeaderKeys={topHeaderKeys}
           leftHeaderKeys={leftHeaderKeys}
           scrollData={scrollData}
@@ -202,7 +171,7 @@ DataTable.propTypes = {
     isOpened: PropTypes.bool
   })),
   leftHeaderTree: PropTypes.arrayOf(PropTypes.object),
-  obtainedValues: PropTypes.instanceOf(Map),
+  hashTable: PropTypes.instanceOf(Map),
   queryParams: PropTypes.shape({
     topHdr: PropTypes.arrayOf(PropTypes.string),
     leftHdr: PropTypes.arrayOf(PropTypes.string),

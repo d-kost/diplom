@@ -1,7 +1,7 @@
 export const createHeaderTree = (header, values) => {
-  let i = 0;
+  let level = 0;
   let result = [];
-  result = createLevel(i, header, values, []);
+  result = createLevel(level, header, values, []);
 
   return result;
 }
@@ -13,7 +13,8 @@ const createLevel = (level, header, values, parentIndexes) => {
   values[header[level].Abbr].forEach((item, i) => {
     //item : {ID, Name, Children}
     let newItem = JSON.parse(JSON.stringify(item));
-    newItem.isOpened = false;
+    //open first level
+    newItem.isOpened = level === 0 ? true : false;
     newItem.Abbr = header[level].Abbr;
 
     if (parentIndexes.length > 0) {
@@ -29,6 +30,11 @@ const createLevel = (level, header, values, parentIndexes) => {
     if (header[level + 1]) {
       newItem.nextLevel = createLevel(level + 1, header, values, newItem.path);
     }
+
+    if (newItem.isOpened) {
+      newItem.Children = createNewPropertiesToChildren(newItem);
+    }
+
   })
 
   return result;
@@ -54,7 +60,7 @@ export const changeHeader = (path, header) => {
 
   targetNode.isOpened = !targetNode.isOpened;
   if (targetNode.isOpened) {
-    targetNode = createNewPropertiesToChildren(targetNode);
+    targetNode.Children = createNewPropertiesToChildren(targetNode);
   }
 
   return { header, isOpened: targetNode.isOpened, Abbr: targetNode.Abbr };
@@ -72,14 +78,13 @@ const createNewPropertiesToChildren = (node) => {
 
         if (node.nextLevel) {
           child.nextLevel = getNextLevelForChild(node.nextLevel, child.path);
-          // child.nextLevel = JSON.parse(JSON.stringify(node.nextLevel));
         }
 
       }
     })
   }
-
-  return node;
+  //возвращать children или ничего, т.к. изменяется по ссылке
+  return node.Children;
 }
 
 
@@ -89,7 +94,6 @@ const getNextLevelForChild = (parentLevel, prevPath) => {
   let result = goAllPaths(level, prevPath);
 
   return result;
-
 }
 
 
@@ -109,7 +113,6 @@ const goAllPaths = (level, prevPath) => {
       });
     }
 
-
     if (node.nextLevel) {
       node.nextLevel = goAllPaths(node.nextLevel, node.path);
     }
@@ -117,5 +120,4 @@ const goAllPaths = (level, prevPath) => {
   })
 
   return level;
-
 }

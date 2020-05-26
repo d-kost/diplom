@@ -27,7 +27,7 @@ class ValuesArea extends PureComponent {
 
     return (
       <div className="field">
-        {console.log('ValuesArea begin render')}
+        {/* {console.log('ValuesArea begin render')} */}
 
         {this.props.leftHeaderKeys.map((keyLeftList, i) => {
           // console.log('height * i, bottom', height * i + ' ' + bottom)
@@ -42,7 +42,7 @@ class ValuesArea extends PureComponent {
                 // console.log('values area key', key);
 
                 let cellKey = `${key} ${i + j}`;
-                let value = this.props.obtainedValues.get(key);
+                let value = this.props.hashTable.get(key);
                 // console.log('values area value', value);  : <div className="field__cell cell-width cell-height">qwe</div>
                 return (
 
@@ -63,7 +63,7 @@ class ValuesArea extends PureComponent {
 }
 
 ValuesArea.propTypes = {  
-  obtainedValues: PropTypes.instanceOf(Map),
+  hashTable: PropTypes.instanceOf(Map),
   topHeaderKeys: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
   leftHeaderKeys: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
   scrollData: PropTypes.objectOf(PropTypes.number, PropTypes.number)
