@@ -79,6 +79,21 @@ const DimensionSelectionField = React.memo((props) => {
     }
   }
 
+
+  const getPreferredDimensionsNames = () => {
+    let names = [];
+
+    for (const key in props.preferredDimensions) {
+      if (props.preferredDimensions.hasOwnProperty(key)) {
+        const element = props.preferredDimensions[key];
+        names.push(element);
+      }
+    }
+
+    return names;
+  }
+
+
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -121,6 +136,12 @@ const DimensionSelectionField = React.memo((props) => {
         >
           Apply
       </button>
+
+        {getPreferredDimensionsNames().map((name, i) => {
+          return (
+            <div key={i}>{name}</div>
+          )
+        })}
       </div>
 
     </>
@@ -131,7 +152,8 @@ DimensionSelectionField.propTypes = {
   dimensions: PropTypes.arrayOf(PropTypes.object),
   onOpenModal: PropTypes.func,
   dimensionValues: PropTypes.objectOf(PropTypes.array),
-  onApplyClick: PropTypes.func
+  onApplyClick: PropTypes.func,
+  preferredDimensions: PropTypes.objectOf(PropTypes.string)
 }
 
 export default DimensionSelectionField;

@@ -21,6 +21,11 @@ export const getDimensionValuesQuery = (abbr) => {
 }
 
 
+export const getTablesQuery = () => {
+  return 'http://localhost:8080/tables';
+}
+
+
 const createQueryValues = (values) => {
 
   let valuesString = '';
@@ -36,22 +41,6 @@ const createQueryValues = (values) => {
     }
   }
   return valuesString;
-}
-
-
-export const getHashTable = (valsArray, existingMap) => {
-  if (existingMap) {
-    existingMap = new Map(existingMap);
-  } else {
-    existingMap = new Map();
-  }
-
-  valsArray.forEach(nestedArray => {
-    let value = nestedArray.shift();
-    existingMap.set(nestedArray.join(' '), value);
-  })
-
-  return existingMap;
 }
 
 

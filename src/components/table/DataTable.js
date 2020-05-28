@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import * as queryHelper from '../../js_modules/queryHelper';
 import { changeHeader } from '../../js_modules/tableHeaderHelper';
 import sassVars from '../../sass/_vars.scss';
-import { buildKeys } from '../../js_modules/keyBuilder';
+import { getHashTable, buildKeys } from '../../js_modules/hashTableHelper';
 
 const DataTable = (props) => {
 
@@ -65,9 +65,9 @@ const DataTable = (props) => {
 
 
 
-  const openBtnClick = (node, isTop) => {
+  const openBtnClick = (node, isLeft) => {
     let path = node.path.slice();
-    let newHeader = isTop ?
+    let newHeader = isLeft ?
       leftHeaderTree.slice() : topHeaderTree.slice();
 
     let changedHeader = changeHeader(path, newHeader);
@@ -84,31 +84,29 @@ const DataTable = (props) => {
       newQueryParams.values[changedHeader.Abbr].push(...newQueryValues);
     }
 
-
     let query = queryHelper.getDataTableQuery(newQueryParams);
-
 
 
     if (newQueryValues.length !== 0) {
       fetch(query)
         .then(response => response.json())
         .then(json => {
-          let newHashTable = queryHelper.getHashTable(json, hashTable);
+          let newHashTable = getHashTable(json, hashTable);
           setHashTable(newHashTable)
           console.log('query', query);
 
-          updateState(isTop, changedHeader.header, keys);
+          updateState(isLeft, changedHeader.header, keys);
           setQueryParams(newQueryParams);
         })
 
     } else {
-      updateState(isTop, changedHeader.header, keys);
+      updateState(isLeft, changedHeader.header, keys);
     }
   }
 
 
-  const updateState = (isTop, header, keys) => {
-    if (isTop) {
+  const updateState = (isLeft, header, keys) => {
+    if (isLeft) {
       setLeftHeaderTree(header);
       setLeftHeaderKeys(keys);
     } else {
@@ -142,7 +140,7 @@ const DataTable = (props) => {
     // let verticalWidth = document.querySelector('.data-table__left-header').clientWidth;
     let verticalWidth = leftHeaderRef.current.clientWidth;
     // let emptyBlock = document.querySelector('.empty-block');
-    console.log('resizeEmptyBlock');
+    // console.log('resizeEmptyBlock');
 
     if (verticalWidth !== emptyBlockRef.current.clientWidth) {
       emptyBlockRef.current.style.minWidth = verticalWidth + 'px';
@@ -153,7 +151,7 @@ const DataTable = (props) => {
   return (
     <div className="data-table" onScroll={onScroll} ref={dataTableRef}>
 
-      {/* {console.log('topHeaderTree', topHeaderTree)} */}
+      {console.log('data-table render')}
       <div className='data-table__top-header-wrapper'>
         <div className="empty-block" ref={emptyBlockRef}></div>
         <TopHeader

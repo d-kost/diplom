@@ -33,3 +33,18 @@ const processNextLevel = (level, prevIds, result) => {
     }
   })
 }
+
+export const getHashTable = (valsArray, existingMap) => {
+  if (existingMap) {
+    existingMap = new Map(existingMap);
+  } else {
+    existingMap = new Map();
+  }
+
+  valsArray.forEach(nestedArray => {
+    let value = nestedArray.shift();
+    existingMap.set(nestedArray.join(' '), value);
+  })
+
+  return existingMap;
+}

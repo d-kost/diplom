@@ -3,6 +3,7 @@ import DataTable from './table/DataTable';
 import DimensionSelection from './dimensions/DimensionSelection';
 import * as queryHelper from '../js_modules/queryHelper';
 import { createHeaderTree } from '../js_modules/tableHeaderHelper';
+import { getHashTable } from '../js_modules/hashTableHelper';
 
 function MainComponent() {
 
@@ -15,6 +16,7 @@ function MainComponent() {
 
 
   useEffect(() => {
+    //get dimension list from server on mounting
     fetch(queryHelper.getDimensionsQuery())
       .then(response => response.json())
       .then(json => setDimensions(json))
@@ -53,7 +55,7 @@ function MainComponent() {
     fetch(query)
       .then(response => response.json())
       .then(json => {
-        let hashTable = queryHelper.getHashTable(json);
+        let hashTable = getHashTable(json);
         setObtainedValuesForValuesArea(hashTable);
 
         setTopHeaderTree(topTree);
