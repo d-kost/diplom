@@ -24,6 +24,7 @@ const DataTable = (props) => {
 
   const emptyBlockRef = useRef(null);
   const leftHeaderRef = useRef(null);
+  const dataTableRef = useRef(null);
 
 
   const getKeysFromHeader = useCallback((header) => {
@@ -32,12 +33,6 @@ const DataTable = (props) => {
 
 
   useEffect(() => {
-    // console.log('dataTable changed props', props.topHeaderTree);
-
-    setScrollData({
-      scrollLeft: 0,
-      scrollTop: 0
-    });
 
     setTopHeaderTree(props.topHeaderTree);
     setLeftHeaderTree(props.leftHeaderTree);
@@ -50,6 +45,18 @@ const DataTable = (props) => {
 
     setTopHeaderKeys(topKeys);
     setLeftHeaderKeys(leftKeys);
+
+    setScrollData({
+      scrollLeft: 0,
+      scrollTop: 0
+    });
+
+    if (dataTableRef.current.scrollLeft !== 0) {
+      dataTableRef.current.scrollLeft = 0;
+    }
+    if (dataTableRef.current.scrollTop !== 0) {
+      dataTableRef.current.scrollTop = 0;
+    }
 
   },
     [props.topHeaderTree, props.leftHeaderTree,
@@ -144,7 +151,7 @@ const DataTable = (props) => {
 
 
   return (
-    <div className="data-table" onScroll={onScroll}>
+    <div className="data-table" onScroll={onScroll} ref={dataTableRef}>
 
       {/* {console.log('topHeaderTree', topHeaderTree)} */}
       <div className='data-table__top-header-wrapper'>
