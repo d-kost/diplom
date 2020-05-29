@@ -23,7 +23,7 @@ function MainComponent() {
   }, [])
 
 
-  const onApplyClick = (singleValues, leftH, topH, values) => {
+  const onApplyClick = (leftH, topH, values) => {
     let queryParams = {
       topHdr: [],
       leftHdr: [],
@@ -33,7 +33,7 @@ function MainComponent() {
     queryParams.leftHdr = queryHelper.createQueryHdr(leftH);
     queryParams.topHdr = queryHelper.createQueryHdr(topH);
 
-    queryParams.values = queryHelper.getAllDimensionsValuesIds(values);//.map(value => value.ID);
+    queryParams.values = queryHelper.getAllDimensionsValuesIds(values);
 
     // queryParams.values = queryHelper.createQueryValues(values);
     let topTree = createHeaderTree(topH, values);

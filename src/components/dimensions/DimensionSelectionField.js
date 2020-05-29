@@ -86,7 +86,7 @@ const DimensionSelectionField = React.memo((props) => {
     for (const key in props.preferredDimensions) {
       if (props.preferredDimensions.hasOwnProperty(key)) {
         const element = props.preferredDimensions[key];
-        names.push(element);
+        names.push(element.RName);
       }
     }
 
@@ -131,8 +131,8 @@ const DimensionSelectionField = React.memo((props) => {
       <div className='dimensions-apply'>
         <button
           className='dimensions-apply__button'
-          onClick={() => props.onApplyClick(dimensions,
-            leftHeaderDimensions, topHeaderDimensions)}
+          onClick={() => props.onApplyClick(leftHeaderDimensions, 
+            topHeaderDimensions)}
         >
           Apply
       </button>
@@ -153,7 +153,7 @@ DimensionSelectionField.propTypes = {
   onOpenModal: PropTypes.func,
   dimensionValues: PropTypes.objectOf(PropTypes.array),
   onApplyClick: PropTypes.func,
-  preferredDimensions: PropTypes.objectOf(PropTypes.string)
+  preferredDimensions: PropTypes.objectOf(PropTypes.object)
 }
 
 export default DimensionSelectionField;

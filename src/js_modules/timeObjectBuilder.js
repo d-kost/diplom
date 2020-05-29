@@ -8,9 +8,7 @@ export const getChosenTimeObject = (chosenTimeValue) => {
   let checkbox = chosenTimeValue.checkboxVals.filter(value => value > periodId).sort();
 
   let level = getLevel(chosenTimeValue, periodId, checkbox);
-  console.log('getChosenTimeObject', level);
   return level;
-
 }
 
 

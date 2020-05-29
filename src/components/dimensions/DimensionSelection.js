@@ -83,7 +83,7 @@ const DimensionSelection = (props) => {
       let dimensions = getPreferredDimensions(values, tables, props.dimensions);
       setPreferredDimensions(dimensions);
     }
-    
+
     //set chosenTimeValue
     if (modalAbbr === 'T') {
       setChosenTimeValue(values);
@@ -105,19 +105,45 @@ const DimensionSelection = (props) => {
   }
 
 
-  const onApplyClick = (singleValues, leftHeader, topHeader) => {
-    //добавить время в chosen в правильном виде
-    //chosenDimensionValues[T] = [{...}];
-    //если в заголовках есть показатели, взять их tables и отфильтровать singleValues
+  const getPreferredValues = () => {
+    let values = {};
+
+    for (const key in preferredDimensions) {
+      if (preferredDimensions.hasOwnProperty(key)) {
+
+        const dimension = preferredDimensions[key];
+        values[dimension.Abbr] = dimensionChosenValues[dimension.Abbr];
+
+      }
+    }
+    return values;
+  }
+
+
+  const getValuesOfHeader = (header) => {
+    let values = {};
+    header.forEach(dimension => {
+      values[dimension.Abbr] = dimensionChosenValues[dimension.Abbr]
+    });
+    return values;
+  }
+
+
+  const onApplyClick = (leftHeader, topHeader) => {
+    //get time in a desired data structure
     let timeObject = getChosenTimeObject(chosenTimeValue);
+
     let values = {
-      ...dimensionChosenValues,
+      // ...dimensionChosenValues,
+      ...getValuesOfHeader(leftHeader),
+      ...getValuesOfHeader(topHeader),
+      ...getPreferredValues(),
       'T': timeObject
     }
-    //надо ли обновлять chosenDimensionValues ?
+
 
     if (leftHeader.length !== 0 && topHeader.length !== 0) {
-      props.onApplyClick(singleValues, leftHeader, topHeader, values);
+      props.onApplyClick(leftHeader, topHeader, values);
     }
 
   }
