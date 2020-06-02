@@ -111,8 +111,9 @@ const DimensionSelection = (props) => {
     for (const key in preferredDimensions) {
       if (preferredDimensions.hasOwnProperty(key)) {
 
-        const dimension = preferredDimensions[key];
-        values[dimension.Abbr] = dimensionChosenValues[dimension.Abbr];
+        const dimensionAbbr = preferredDimensions[key];
+        // values[dimension.Abbr] = dimensionChosenValues[dimension.Abbr];
+        values[dimensionAbbr] = dimensionChosenValues[dimensionAbbr];
 
       }
     }

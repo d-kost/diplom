@@ -8,21 +8,20 @@ const ModalWindow = (props) => {
 
       {props.children}
 
-
       <div className="modal-window__bottom-panel">
         <button
           className='modal-window__button'
           onClick={props.onCancelClick}
         >
           Cancel
-            </button>
+        </button>
 
         <button
           className='modal-window__button'
           onClick={() => props.onAcceptClick()}
         >
           Accept
-            </button>
+        </button>
       </div>
     </div>
   )

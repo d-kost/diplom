@@ -43,12 +43,6 @@ function MainComponent() {
     queryParams.values = getChildrenValues(leftTree, queryParams.values);
 
 
-    // leftTree.forEach(a => {
-    //   if (a.isOpened) {
-    //     queryParams.values[a.Abbr].push(...getQueryValues(a.Children, a.Abbr, queryParams));
-    //   }
-    // });
-
     let query = queryHelper.getDataTableQuery(queryParams);
     console.log('query', query);
 

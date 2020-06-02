@@ -29,6 +29,7 @@ const Panel = (props) => {
                   index={index}
                   onOpenModal={props.onOpenModal}
                   dimensionValue={props.dimensionValues[dim.Abbr]}
+                  preferredDimensions={props.preferredDimensions}
                 >
                 </Dimension>
               ))}
@@ -53,7 +54,8 @@ Panel.propTypes = {
   data: PropTypes.object,
   onOpenModal: PropTypes.func,
   dimensionValues: PropTypes.objectOf(PropTypes.array),
-  dimensions: PropTypes.arrayOf(PropTypes.object)
+  dimensions: PropTypes.arrayOf(PropTypes.object),
+  preferredDimensions: PropTypes.objectOf(PropTypes.string)
 }
 
 export default Panel;

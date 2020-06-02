@@ -15,6 +15,7 @@ const ValuesTreeNode = (props) => {
         <span
           className='modal-tree__switch tree-button'
           onClick={props.onSwitchClick}
+          tabIndex={0}
         >
           {props.isOpened ? '\u2796' : '\u2795'}
         </span>
@@ -27,6 +28,7 @@ const ValuesTreeNode = (props) => {
       <div
         className='modal-tree__button-down tree-button'
         onClick={() => handleClick(props.node)}
+        tabIndex={0}
       >
         &#11167;
         </div>

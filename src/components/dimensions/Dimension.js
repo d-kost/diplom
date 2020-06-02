@@ -13,6 +13,13 @@ const Dimension = React.memo((props) => {
     }
   }
 
+  const getClassList = (id) => {
+    let result = ['selection-list__dimension'];
+    if (props.preferredDimensions[id] || id === 0) {
+      result.push('selection-list__dimension--preferred');
+    }
+    return result;
+  }
 
   return (
     <Draggable draggableId={props.dimension.id.toString()} index={props.index}>
@@ -22,7 +29,7 @@ const Dimension = React.memo((props) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className="selection-list__dimension"
+          className={getClassList(props.dimension.id).join(' ')}
         >
 
           {/* {console.log('render li', props.dimensionValue)} */}
@@ -38,7 +45,7 @@ const Dimension = React.memo((props) => {
             onClick={() => props.onOpenModal(props.dimension.Abbr)}
             className='selection-list__button'
           >
-            Open
+            &#9998;
           </button>
 
         </li>
@@ -58,7 +65,8 @@ Dimension.propTypes = {
   }),
   index: PropTypes.number,
   onOpenModal: PropTypes.func,
-  dimensionValue: PropTypes.arrayOf(PropTypes.object)
+  dimensionValue: PropTypes.arrayOf(PropTypes.object),
+  preferredDimensions: PropTypes.objectOf(PropTypes.string)
 }
 
 export default Dimension;

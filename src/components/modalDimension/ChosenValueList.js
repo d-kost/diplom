@@ -13,6 +13,7 @@ const ChosenValueList = (props) => {
             <div
               className='modal-list__delete-btn'
               onClick={() => props.onDeleteClick(value.ID)}
+              tabIndex={0}
             >
               Delete
             </div>

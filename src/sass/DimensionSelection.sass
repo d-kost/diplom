@@ -6,9 +6,15 @@
     width: max-content
     border: $dimensionBorder
     border-radius: 5px
+    background-color: #dbd8d3
     
     &__title
         border-bottom: $dimensionBorder
+        text-align: center
+        padding: 5px
+        background-color: #756574
+        font-weight: 500
+        color: #f3f1f1
     &__panel
         width: 400px
         border-right: $dimensionBorder
@@ -17,17 +23,23 @@
 
 .dimensions-apply
     padding: 20px 0
-    display: flex
 
     &__button
         height: 50px
         width: 150px
         cursor: pointer
+        background-color: #cab8aa
+        border-radius: 5px
+        font-weight: 600
+        outline: none
+        border: $dimensionBorder
+        &:active
+            border: $buttonActiveBorder
 
 .selection-list
     display: flex
     flex-direction: column
-    overflow-y: scroll
+    overflow-y: auto
     height: 200px
     &__ul
         list-style: none
@@ -40,11 +52,21 @@
         padding: 10px
         border: $dimensionBorder
         border-radius: 5px
+        background-color: #f3f1f1
+        &--preferred
+            background-color: #cab8aa
     &__title
         margin: 0
         display: inline
         white-space: nowrap
         overflow: hidden
     &__button
-        border-radius: 50%
-        // height: 20%
+        border-radius: 5px
+        background: transparent
+        cursor: pointer
+        border: $dimensionBorder
+        outline: none
+        &:active
+            border: $buttonActiveBorder
+        &:focus
+            border: $buttonActiveBorder

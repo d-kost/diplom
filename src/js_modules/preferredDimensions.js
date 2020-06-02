@@ -10,7 +10,7 @@ export const getPreferredDimensions = (values, tables, dimensions) => {
         let id = dimension.DimId;
 
         if (id > 0 && !preferredDimensions[id]) {
-          preferredDimensions[id] = getDimensionNameAndAbbrById(id, dimensions);
+          preferredDimensions[id] = getDimensionAbbrById(id, dimensions);
         }
       })
     }
@@ -42,7 +42,7 @@ const getIndicatorTablesIds = (values) => {
 }
 
 
-const getDimensionNameAndAbbrById = (id, dimensions) => {
+const getDimensionAbbrById = (id, dimensions) => {
   let dim = dimensions.find(dim => dim.id === id);
-  return {RName: dim.RName, Abbr: dim.Abbr};
+  return dim.Abbr;
 }

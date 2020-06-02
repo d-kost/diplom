@@ -39,25 +39,13 @@ class HeaderCell extends PureComponent {
     }
     nodeClass.push(this.props.isVertical ? 'node--border-bottom' : 'node--border-right');
 
-
-    // if (!this.props.isVertical &&
-    //   !this.props.node.isOpened &&
-    //   !this.props.node.nextLevel) {
-    if (!this.props.isVertical &&
-      isEnding) {
-
+    if (!this.props.isVertical && isEnding) {
       nodeClass.push("cell-width");
     }
 
-    // if (this.props.isVertical &&
-    //   !this.props.node.isOpened &&
-    //   !this.props.node.nextLevel) {
-    if (this.props.isVertical &&
-      isEnding) {
-
+    if (this.props.isVertical && isEnding) {
       nodeClass.push("cell-height");
     }
-
 
     return nodeClass;
   }
@@ -116,9 +104,7 @@ class HeaderCell extends PureComponent {
 
 
     return (
-      <div
-        className={nodeClass.join(' ')}
-      >
+      <div className={nodeClass.join(' ')}>
         <div
           className={node_container.join(' ')}
           title={this.props.node.Name}

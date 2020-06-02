@@ -13,7 +13,6 @@ const TimeSelection = (props) => {
       chosenPeriodFrom: timeData.periodValue[id].min,
       chosenPeriodTo: timeData.periodValue[id].max
     };
-    //изменяеть границы From и To
 
     props.changeChosenTime(newTime);
   }
@@ -121,6 +120,7 @@ const TimeSelection = (props) => {
                 name='period'
                 type='checkbox'
                 value={period.ID}
+                tabIndex={0}
                 defaultChecked={props.chosenTimeValue.checkboxVals.includes(period.ID)}
                 disabled={period.ID < props.chosenTimeValue.periodId ? true : false}
                 onClick={(e) => onChangeCheckbox(period.ID, e.target.checked)} />
