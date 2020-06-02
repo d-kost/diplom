@@ -1,3 +1,5 @@
+@import 'vars'
+
 .modal
     background: rgba(0, 0, 0, .5)
     position: fixed
@@ -14,15 +16,29 @@
         align-items: center
         background: #fff
         margin: auto
-        width: 70%
+        box-sizing: border-box
+        width: 57%
         height: 450px
         max-height: 80%
-        padding: 20px
+        padding: 20px 30px
         box-shadow: 0 5px 10px 2px rgba(0, 0, 0, .7)
+        &__bottom-panel
+            width: 100%
+            border-top: $border
+            border-top-width: 3px
+            display: flex
+            justify-content: flex-end
+        &__button
+            width: 90px
+            height: 30px
+            margin-right: 45px
+            margin-top: 10px
+    &-container
+        height: 90%
+        width: 100%
 
 
     &-tree
-        width: 90%
         height: 60%
         overflow-y: scroll
         overflow-x: scroll
@@ -31,7 +47,7 @@
             display: flex
             flex-direction: row
             &:hover
-                background-color: #cccccc
+                background-color: $modalHoverColor
         &__switch
             padding: 10px
         &__name
@@ -46,22 +62,29 @@
 
 
     &-list
-        width: 90%
         border: 1px solid #000
         height: 30%
         min-height: 20%
         overflow-y: scroll
+        padding-left: 20px
         &__item
             list-style: none
             display: flex
             flex-direction: row
             justify-content: space-between
+            &:hover
+                background-color: $modalHoverColor
         &__name
             margin: 0
         &__delete-btn
             cursor: pointer
 
+
 .tree-button
     cursor: pointer
+    outline: none
+    border-bottom: 2px solid transparent
+    &:focus, &:active
+        border-bottom: 2px solid darken($modalHoverColor, 10%)
     &:hover
-        background-color: #a5a5a5
+        background-color: darken($modalHoverColor, 10%)

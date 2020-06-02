@@ -10,13 +10,15 @@ const ChosenValueList = (props) => {
         return (
           <li key={value.ID} className='modal-list__item'>
             <p className='modal-list__name'>{value.ID} {value.Name}</p>
-            <div
+            <span
               className='modal-list__delete-btn'
               onClick={() => props.onDeleteClick(value.ID)}
               tabIndex={0}
+              role='img'
+              aria-label='delete'
             >
-              Delete
-            </div>
+              &#10060;
+            </span>
           </li>
         )
       })}

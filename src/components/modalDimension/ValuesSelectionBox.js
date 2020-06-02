@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const ValuesSelectionBox = (props) => {
 
   return (
-    <>
+    <div className='modal-container'>
       <ValuesTreeHolder
         tree={props.tree}
         onNodeDownClick={props.onNodeDownClick}
@@ -16,7 +16,7 @@ const ValuesSelectionBox = (props) => {
         values={props.chosenValueList}
         onDeleteClick={props.onDeleteClick}
       />
-    </>
+    </div>
 
   )
 }

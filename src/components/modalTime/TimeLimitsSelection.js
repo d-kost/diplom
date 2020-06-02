@@ -10,7 +10,7 @@ const TimeLimitsSelection = (props) => {
   const periodValue = timeData.periodValue[props.chosenTimeValue.periodId];
 
   return (
-    <>
+    <div className='limit-selection'>
       <p>С</p>
       <div className='time-limit'>
 
@@ -56,7 +56,7 @@ const TimeLimitsSelection = (props) => {
           />}
 
       </div>
-    </>
+    </div>
   )
 }
 

@@ -45,7 +45,7 @@ const PeriodValue = (props) => {
       <p className='time-limit__name'>{props.name} </p>
 
       <select
-        className='period-select'
+        className='time-limit__select'
         value={getValidValue()}
         onChange={(e) => props.onChange(e.target.value)}
       >

@@ -119,7 +119,7 @@ const DimensionSelectionField = React.memo((props) => {
 
       <div className='dimensions-apply'>
         <button
-          className='dimensions-apply__button'
+          className='dimensions-apply__button common-button'
           onClick={() => props.onApplyClick(leftHeaderDimensions, 
             topHeaderDimensions)}
         >

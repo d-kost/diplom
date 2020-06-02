@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import '../../sass/HeaderCell.sass';
 import OpenBtn from "./OpenBtn";
 import PropTypes from 'prop-types';
+import getPreferredPeriodDisplay from '../../js_modules/preferredPeriodDisplay';
 
 class HeaderCell extends PureComponent {
   constructor(props) {
@@ -66,7 +67,7 @@ class HeaderCell extends PureComponent {
     let textClass = ['node__text'];
 
     let needsLimit = (this.props.node.Children && this.props.node.Children.length === 1) ||
-    (this.props.node.nextLevel && this.props.node.nextLevel.length === 1);
+      (this.props.node.nextLevel && this.props.node.nextLevel.length === 1);
 
     if (needsLimit && this.props.isVertical) {
       textClass.push('limit-height');
@@ -88,6 +89,16 @@ class HeaderCell extends PureComponent {
         resizeEmptyBlock={this.props.resizeEmptyBlock}
       />
     )
+  }
+
+
+  getNameToDisplay() {
+    if (this.props.node.Abbr === 'T') {
+      let [number, name] = this.props.node.Name.split(' ');    
+      let title = getPreferredPeriodDisplay(name, number);
+      return title;
+    }
+    return this.props.node.Name;
   }
 
 
@@ -118,7 +129,7 @@ class HeaderCell extends PureComponent {
 
           {/* {console.log('render head cell')} */}
           <p className={nodeTextClass.join(' ')}>
-            {this.props.node.ID} {this.props.node.Name}
+            {this.getNameToDisplay()}
           </p>
         </div>
 

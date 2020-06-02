@@ -1,6 +1,12 @@
-.time
-    &-radiogroup
+.modal-time
         display: flex
+        flex-direction: column
+        align-items: center
+        width: 100%
+        height: 90%
+        overflow: auto
+
+.time
     &-limit
         display: flex
         &__item
@@ -9,10 +15,13 @@
         &__name
             margin: 0
             padding-right: 5px
+        &__select
+            width: 100px
 
-.period-select
-    
-    &__option
-        // text-transform: uppercase
-    // &__option p:first-letter
-    //     text-transform: uppercase
+.period-group
+    display: flex
+    justify-content: space-between
+    &__item
+        margin: 10px 10px 10px 0
+        &:last-child
+            margin-right: 0

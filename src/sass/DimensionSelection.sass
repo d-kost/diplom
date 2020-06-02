@@ -12,9 +12,9 @@
         border-bottom: $dimensionBorder
         text-align: center
         padding: 5px
-        background-color: #756574
+        background-color: $headerBackground
         font-weight: 500
-        color: #f3f1f1
+        color: $headerColor
     &__panel
         width: 400px
         border-right: $dimensionBorder
@@ -27,14 +27,17 @@
     &__button
         height: 50px
         width: 150px
-        cursor: pointer
-        background-color: #cab8aa
-        border-radius: 5px
-        font-weight: 600
-        outline: none
-        border: $dimensionBorder
-        &:active
-            border: $buttonActiveBorder
+
+.common-button
+    background-color: #cab8aa
+    cursor: pointer
+    border-radius: 5px
+    border: $dimensionBorder
+    font-weight: 600
+    outline: none 
+    &:focus, &:active
+        border: $buttonActiveBorder
+
 
 .selection-list
     display: flex
@@ -52,7 +55,7 @@
         padding: 10px
         border: $dimensionBorder
         border-radius: 5px
-        background-color: #f3f1f1
+        background-color: $lightBackground
         &--preferred
             background-color: #cab8aa
     &__title
@@ -66,7 +69,5 @@
         cursor: pointer
         border: $dimensionBorder
         outline: none
-        &:active
-            border: $buttonActiveBorder
-        &:focus
+        &:active, &:focus
             border: $buttonActiveBorder

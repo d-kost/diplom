@@ -10,14 +10,14 @@ const ModalWindow = (props) => {
 
       <div className="modal-window__bottom-panel">
         <button
-          className='modal-window__button'
+          className='modal-window__button common-button'
           onClick={props.onCancelClick}
         >
           Cancel
         </button>
 
         <button
-          className='modal-window__button'
+          className='modal-window__button common-button'
           onClick={() => props.onAcceptClick()}
         >
           Accept

@@ -60,8 +60,6 @@ const TimeSelection = (props) => {
 
 
   const changeChosenPeriodFrom = (value) => {
-    console.log('changeChosenPeriodFrom', value);
-
     value = parseInt(value);
     let chosenPeriodTo = props.chosenTimeValue.chosenPeriodTo;
 
@@ -89,57 +87,58 @@ const TimeSelection = (props) => {
 
   return (
     <div className='modal-time'>
+      <div className='modal-time__wrapper'>
+        <div className='period-group'>
 
-      <div className='time-radiogroup'>
+          {timeData.periodList.map(period => {
+            return (
+              <p key={period.ID} className='period-group__item'>
+                <input
+                  name='period'
+                  type='radio'
+                  value={period.ID}
+                  defaultChecked={period.ID === props.chosenTimeValue.periodId ? true : false}
+                  onChange={() => onChangePeriod(period.ID)}
+                />
 
-        {timeData.periodList.map(period => {
-          return (
-            <p key={period.ID}>
-              <input
-                name='period'
-                type='radio'
-                value={period.ID}
-                defaultChecked={period.ID === props.chosenTimeValue.periodId ? true : false}
-                onChange={() => onChangePeriod(period.ID)}
-              />
-
-              {period.Name}
-            </p>
-          )
-        })}
+                {period.Name}
+              </p>
+            )
+          })}
 
 
-      </div>
+        </div>
 
-      <div className='time-radiogroup'>
+        <div className='period-group'>
 
-        {timeData.periodList.map(period => {
-          return (
-            <p key={period.ID}>
-              <input
-                name='period'
-                type='checkbox'
-                value={period.ID}
-                tabIndex={0}
-                defaultChecked={props.chosenTimeValue.checkboxVals.includes(period.ID)}
-                disabled={period.ID < props.chosenTimeValue.periodId ? true : false}
-                onClick={(e) => onChangeCheckbox(period.ID, e.target.checked)} />
+          {timeData.periodList.map(period => {
+            return (
+              <p key={period.ID} className='period-group__item'>
+                <input
+                  name='period'
+                  type='checkbox'
+                  value={period.ID}
+                  tabIndex={0}
+                  defaultChecked={props.chosenTimeValue.checkboxVals.includes(period.ID)}
+                  disabled={period.ID < props.chosenTimeValue.periodId ? true : false}
+                  onClick={(e) => onChangeCheckbox(period.ID, e.target.checked)} />
 
-              {period.Name}
-            </p>
-          )
-        })}
+                {period.Name}
+              </p>
+            )
+          })}
 
-      </div>
+        </div>
 
-      <TimeLimitsSelection
-        chosenTimeValue={props.chosenTimeValue}
-        changeYearFrom={changeYearFrom}
-        changeYearTo={changeYearTo}
-        changeChosenPeriodFrom={changeChosenPeriodFrom}
-        changeChosenPeriodTo={changeChosenPeriodTo}
-      />
-    </div >
+        <TimeLimitsSelection
+          chosenTimeValue={props.chosenTimeValue}
+          changeYearFrom={changeYearFrom}
+          changeYearTo={changeYearTo}
+          changeChosenPeriodFrom={changeChosenPeriodFrom}
+          changeChosenPeriodTo={changeChosenPeriodTo}
+        />
+      </div >
+    </div>
   )
 }
 
