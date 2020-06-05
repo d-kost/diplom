@@ -78,16 +78,26 @@ const DataTable = (props) => {
 
     //if isOpened add children ids to queryParams values
     if (changedHeader.isOpened) {
-      //сделать так, чтобы запрос формировался не для всех значений
-      //а только для новых из текущего заголовка + для всех из противоположного
+      //get list of ids of new nodes 
       newQueryValues = queryHelper.getListValues(node.Children, changedHeader.Abbr, newQueryParams.values);
       newQueryParams.values[changedHeader.Abbr].push(...newQueryValues);
     }
 
-    let query = queryHelper.getDataTableQuery(newQueryParams);
-
 
     if (newQueryValues.length !== 0) {
+
+      //запрос формируется не для всех значений текущего уровня заголовка
+      //а только для новых + для остальных уровней и противоположного заголовка
+      let query = queryHelper.getDataTableQuery(
+        {
+          ...newQueryParams,
+          values: {
+            ...newQueryParams.values,
+            [changedHeader.Abbr]: newQueryValues
+          }
+        }
+      );
+
       fetch(query)
         .then(response => response.json())
         .then(json => {
@@ -116,7 +126,6 @@ const DataTable = (props) => {
   }
 
 
-
   const cellWidth = parseInt(sassVars.cellWidth, 10);
   const cellHeight = parseInt(sassVars.cellHeight, 10);
 
@@ -132,11 +141,10 @@ const DataTable = (props) => {
         scrollTop: target.scrollTop
       });
     }
-
-
   }
 
-  const resizeEmptyBlock = () => {       
+
+  const resizeEmptyBlock = () => {
     let verticalWidth = leftHeaderRef.current.clientWidth;
 
     if (verticalWidth !== emptyBlockRef.current.clientWidth) {
@@ -148,7 +156,7 @@ const DataTable = (props) => {
   return (
     <div className="data-table" onScroll={onScroll} ref={dataTableRef}>
 
-      {console.log('data-table render', topHeaderTree)}
+      {/* {console.log('data-table render')} */}
       <div className='data-table__top-header-wrapper'>
         <div className="empty-block" ref={emptyBlockRef}></div>
         <TopHeader
@@ -177,7 +185,6 @@ const DataTable = (props) => {
 
     </div>
   )
-
 }
 
 DataTable.propTypes = {
