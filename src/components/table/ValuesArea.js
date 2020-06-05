@@ -16,7 +16,6 @@ class ValuesArea extends PureComponent {
   }
 
 
-
   render() {
     const top = this.props.scrollData.scrollTop;
     const bottom = this.state.maxTableHeight + top;
@@ -30,20 +29,17 @@ class ValuesArea extends PureComponent {
         {/* {console.log('ValuesArea begin render')} */}
 
         {this.props.leftHeaderKeys.map((keyLeftList, i) => {
-          // console.log('height * i, bottom', height * i + ' ' + bottom)
           return (
-
 
             (this.state.cellHeight * i + this.state.cellHeight <= bottom) &&
             <div className="field__row" key={keyLeftList + ' ' + i}>
               {this.props.topHeaderKeys.map((keyTopList, j) => {
 
                 let key = `${keyLeftList.join(' ')} ${keyTopList.join(' ')}`;
-                // console.log('values area key', key);
 
                 let cellKey = `${key} ${i + j}`;
                 let value = this.props.hashTable.get(key);
-                // console.log('values area value', value);  : <div className="field__cell cell-width cell-height">qwe</div>
+                
                 return (
 
                   (this.state.cellWidth * j + this.state.cellWidth <= right) &&
@@ -59,7 +55,6 @@ class ValuesArea extends PureComponent {
       </div>
     )
   }
-
 }
 
 ValuesArea.propTypes = {  

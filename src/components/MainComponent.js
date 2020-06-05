@@ -4,6 +4,7 @@ import DimensionSelection from './dimensions/DimensionSelection';
 import * as queryHelper from '../js_modules/queryHelper';
 import { createHeaderTree } from '../js_modules/tableHeaderHelper';
 import { getHashTable } from '../js_modules/hashTableHelper';
+import ErrorComoponent from './error/ErrorComponent';
 
 function MainComponent() {
 
@@ -14,12 +15,20 @@ function MainComponent() {
   const [obtainedValuesForValuesArea, setObtainedValuesForValuesArea] = useState();
   const [queryParams, setQueryParams] = useState({});
 
+  const [error, setError] = useState(false);
+  const [serverError, setServerError] = useState(false);
+
 
   useEffect(() => {
     //get dimension list from server on mounting
     fetch(queryHelper.getDimensionsQuery())
-      .then(response => response.json())
-      .then(json => setDimensions(json))
+      .then(response => response.json(),
+        () => setServerError(true))
+      .then(json => {
+        if (json) {
+          setDimensions(json);
+        }
+      })
   }, [])
 
 
@@ -30,33 +39,47 @@ function MainComponent() {
       values: {}
     }
 
-    queryParams.leftHdr = queryHelper.createQueryHdr(leftH);
-    queryParams.topHdr = queryHelper.createQueryHdr(topH);
+    try {
+      queryParams.leftHdr = queryHelper.createQueryHdr(leftH);
+      queryParams.topHdr = queryHelper.createQueryHdr(topH);
+      queryParams.values = queryHelper.getAllDimensionsValuesIds(values);
 
-    queryParams.values = queryHelper.getAllDimensionsValuesIds(values);
+      let topTree = createHeaderTree(topH, values);
+      let leftTree = createHeaderTree(leftH, values);
+      if (!topTree.length || !leftTree.length) {
+        return;
+      }
 
-    // queryParams.values = queryHelper.createQueryValues(values);
-    let topTree = createHeaderTree(topH, values);
-    let leftTree = createHeaderTree(leftH, values);
-
-    queryParams.values = getChildrenValues(topTree, queryParams.values);
-    queryParams.values = getChildrenValues(leftTree, queryParams.values);
+      queryParams.values = getChildrenValues(topTree, queryParams.values);
+      queryParams.values = getChildrenValues(leftTree, queryParams.values);
 
 
-    let query = queryHelper.getDataTableQuery(queryParams);
-    console.log('query', query);
+      let query = queryHelper.getDataTableQuery(queryParams);
+      console.log('query', query);
 
-    fetch(query)
-      .then(response => response.json())
-      .then(json => {
-        let hashTable = getHashTable(json);
-        setObtainedValuesForValuesArea(hashTable);
+      fetch(query)
+        .then(response => response.json(),
+          () => setServerError(true))
+        .then(json => {
+          if (!json) {
+            return;
+          }
+          let hashTable = getHashTable(json);
+          setObtainedValuesForValuesArea(hashTable);
 
-        setTopHeaderTree(topTree);
-        setLeftHeaderTree(leftTree);
+          setTopHeaderTree(topTree);
+          setLeftHeaderTree(leftTree);
 
-        setQueryParams(queryParams);
-      })
+          setQueryParams(queryParams);
+
+          if (serverError) {
+            setServerError(false);
+          }
+        })
+
+    } catch {
+      setError(true);
+    }
 
   }
 
@@ -78,18 +101,31 @@ function MainComponent() {
   return (
     <div className='app-container'>
       {dimensions.length !== 0 &&
+
         <DimensionSelection
           dimensions={dimensions}
           onApplyClick={onApplyClick}
         />
       }
 
-      {topHeaderTree.length !== 0 && leftHeaderTree.length !== 0 &&
+      {!error &&
+        topHeaderTree.length !== 0 &&
+        leftHeaderTree.length !== 0 &&
+        obtainedValuesForValuesArea.size !== 0 &&
+        Object.keys(queryParams).length !== 0 &&
+
         <DataTable
           topHeaderTree={topHeaderTree}
           leftHeaderTree={leftHeaderTree}
           hashTable={obtainedValuesForValuesArea}
           queryParams={queryParams}
+        />
+      }
+
+      {(error || serverError) &&
+        <ErrorComoponent
+          error={error}
+          serverError={serverError}
         />}
     </div>
   )

@@ -27,7 +27,6 @@ const DimensionSelection = (props) => {
   useEffect(() => {
     //get dimensions values and tables from server on mounting
     const setupDimensionValues = () => {
-      console.log('setupDimensionValues');
 
       let values = {};
       let chosenValues = {};
@@ -112,7 +111,6 @@ const DimensionSelection = (props) => {
       if (preferredDimensions.hasOwnProperty(key)) {
 
         const dimensionAbbr = preferredDimensions[key];
-        // values[dimension.Abbr] = dimensionChosenValues[dimension.Abbr];
         values[dimensionAbbr] = dimensionChosenValues[dimensionAbbr];
 
       }
@@ -124,26 +122,30 @@ const DimensionSelection = (props) => {
   const getValuesOfHeader = (header) => {
     let values = {};
     header.forEach(dimension => {
-      values[dimension.Abbr] = dimensionChosenValues[dimension.Abbr]
+      if (dimensionChosenValues[dimension.Abbr]) {
+        values[dimension.Abbr] = dimensionChosenValues[dimension.Abbr];
+      }
     });
     return values;
   }
 
 
   const onApplyClick = (leftHeader, topHeader) => {
-    //get time in a desired data structure
-    let timeObject = getChosenTimeObject(chosenTimeValue);
+    if (leftHeader.length !== 0 &&
+      topHeader.length !== 0 &&
+      Object.keys(dimensionChosenValues).length !== 0) {
 
-    let values = {
-      // ...dimensionChosenValues,
-      ...getValuesOfHeader(leftHeader),
-      ...getValuesOfHeader(topHeader),
-      ...getPreferredValues(),
-      'T': timeObject
-    }
+      //get time in a desired data structure
+      let timeObject = getChosenTimeObject(chosenTimeValue);
 
+      let values = {
+        // ...dimensionChosenValues,
+        ...getValuesOfHeader(leftHeader),
+        ...getValuesOfHeader(topHeader),
+        ...getPreferredValues(),
+        'T': timeObject
+      }
 
-    if (leftHeader.length !== 0 && topHeader.length !== 0) {
       props.onApplyClick(leftHeader, topHeader, values);
     }
 

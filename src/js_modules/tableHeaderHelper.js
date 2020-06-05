@@ -10,6 +10,10 @@ export const createHeaderTree = (header, values) => {
 const createLevel = (level, header, values, parentIndexes) => {
   let result = [];
 
+  if (!values[header[level].Abbr]) {
+    return result;
+  }
+
   values[header[level].Abbr].forEach((item, i) => {
     //item : {ID, Name, Children}
     let newItem = JSON.parse(JSON.stringify(item));
