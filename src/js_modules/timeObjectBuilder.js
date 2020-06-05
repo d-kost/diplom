@@ -27,7 +27,7 @@ const getLevel = (chosenTimeValue, id, checkboxVals) => {
         let [nextId, checkbox] = extractNextId(checkboxVals);
 
         let limits = getPeriodLimits(id, nextId);
-        timeObject.Children = periodLevel(nextId, checkbox, year, limits);
+        timeObject.Children = periodLevel(nextId, checkbox, year, limits, 0);
       }
 
       result.push(timeObject);
@@ -37,7 +37,7 @@ const getLevel = (chosenTimeValue, id, checkboxVals) => {
       let periodFrom = chosenTimeValue.chosenPeriodFrom;
       let periodTo = chosenTimeValue.chosenPeriodTo;
 
-      result.push(...periodLevel(id, checkboxVals, year, [periodFrom, periodTo]));
+      result.push(...periodLevel(id, checkboxVals, year, [periodFrom, periodTo], 0));
 
     }
   }
@@ -52,18 +52,18 @@ const extractNextId = (checkboxVals) => {
 }
 
 
-const periodLevel = (id, checkboxVals, year, limits) => {
+const periodLevel = (id, checkboxVals, year, limits, level) => {
   let result = [];
 
   for (let period = limits[0]; period <= limits[1]; period++) {
 
-    let timeObject = createTimeObject(id, period, year);
+    let timeObject = createTimeObject(id, period, year, level);
 
     if (checkboxVals.length > 0) {
       let [nextId, checkbox] = extractNextId(checkboxVals);
 
       let limits = getPeriodLimits(id, nextId, period);
-      timeObject.Children = periodLevel(nextId, checkbox, year, limits);
+      timeObject.Children = periodLevel(nextId, checkbox, year, limits, level + 1);
     }
 
     result.push(timeObject);
@@ -72,7 +72,7 @@ const periodLevel = (id, checkboxVals, year, limits) => {
 }
 
 
-const createTimeObject = (id, period, year) => {
+const createTimeObject = (id, period, year, level) => {
   let timeObject = {};
   let periodData = timeData.getPeriodById(id);
 
@@ -90,6 +90,11 @@ const createTimeObject = (id, period, year) => {
 
   let periodName = periodData.Name;
   timeObject.Name = `${period} ${periodName}`;
+
+  //add year to root if year is not root
+  if (level === 0 && id !== 0) {
+    timeObject.year = `${year} Год`;
+  }
 
   return timeObject;
 }

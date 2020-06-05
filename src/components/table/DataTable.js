@@ -137,10 +137,7 @@ const DataTable = (props) => {
   }
 
   const resizeEmptyBlock = () => {       
-    // let verticalWidth = document.querySelector('.data-table__left-header').clientWidth;
     let verticalWidth = leftHeaderRef.current.clientWidth;
-    // let emptyBlock = document.querySelector('.empty-block');
-    // console.log('resizeEmptyBlock');
 
     if (verticalWidth !== emptyBlockRef.current.clientWidth) {
       emptyBlockRef.current.style.minWidth = verticalWidth + 'px';
@@ -151,7 +148,7 @@ const DataTable = (props) => {
   return (
     <div className="data-table" onScroll={onScroll} ref={dataTableRef}>
 
-      {console.log('data-table render')}
+      {console.log('data-table render', topHeaderTree)}
       <div className='data-table__top-header-wrapper'>
         <div className="empty-block" ref={emptyBlockRef}></div>
         <TopHeader

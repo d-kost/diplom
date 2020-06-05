@@ -96,6 +96,9 @@ class HeaderCell extends PureComponent {
     if (this.props.node.Abbr === 'T') {
       let [number, name] = this.props.node.Name.split(' ');    
       let title = getPreferredPeriodDisplay(name, number);
+      if (this.props.node.year) {
+        title += ' ' + this.props.node.year;
+      }
       return title;
     }
     return this.props.node.Name;
