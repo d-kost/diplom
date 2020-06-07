@@ -46,6 +46,7 @@
             border-bottom: 1px solid grey
             display: flex
             flex-direction: row
+            padding: 2px
             &:hover
                 background-color: $modalHoverColor
         &__switch
@@ -62,10 +63,11 @@
 
 
     &-list
-        border: 1px solid #000
+        border: 2px solid #cab8aa
         height: 30%
         min-height: 20%
         overflow-y: scroll
+        padding: 2px
         padding-left: 20px
         &__item
             list-style: none
@@ -81,10 +83,12 @@
 
 
 .tree-button
+    background-color: transparent
+    border: none
     cursor: pointer
-    outline: none
-    border-bottom: 2px solid transparent
-    &:focus, &:active
-        border-bottom: 2px solid darken($modalHoverColor, 10%)
+    outline-color: darken($modalHoverColor, 10%)
+    outline-width: 2px
+    // &:focus, &:active
+        // border: 2px solid darken($modalHoverColor, 10%)
     &:hover
         background-color: darken($modalHoverColor, 10%)

@@ -11,6 +11,7 @@ const ModalWrapper = (props) => {
   const [chosenValueList, setChosenValueList] = useState(props.dimensionValues);
   const [chosenTime, setChosenTime] = useState(props.chosenTimeValue);
 
+
   const onValueDownClick = (node) => {
     if (!chosenValueList.includes(node)) {
       let newList = [...chosenValueList, node];
@@ -22,7 +23,9 @@ const ModalWrapper = (props) => {
   const onValueDeleteClick = (id) => {
     let newList = chosenValueList.filter(indicator => indicator.ID !== id);
     setChosenValueList(newList);
+
   }
+
 
   const changeChosenTime = useCallback((newTime) => {
     setChosenTime(newTime);

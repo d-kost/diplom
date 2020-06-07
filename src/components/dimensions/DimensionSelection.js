@@ -72,8 +72,10 @@ const DimensionSelection = (props) => {
 
 
   const onOpenModal = (abbr) => {
-    setModalAbbr(abbr);
-    setShowModal(true);
+    if (dimensionChosenValues[abbr]) {
+      setModalAbbr(abbr);
+      setShowModal(true);
+    }
   }
 
 

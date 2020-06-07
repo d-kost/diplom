@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 const OpenBtn = (props) => {
 
   return (
-    <div className="node__open-btn"
-      onClick={props.openClickHandler}>{props.openSign}</div>
+    <button className="node__open-btn"
+      onClick={props.openClickHandler}>{props.openSign}</button>
   )
 
 }

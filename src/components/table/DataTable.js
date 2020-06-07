@@ -179,10 +179,10 @@ const DataTable = (props) => {
         />}
 
       <div className="data-table" onScroll={onScroll} ref={dataTableRef}>
-        {/* {console.log('data-table render')} */}
 
         {!error &&
           <>
+            {console.log('data-table render')}
             <div className='data-table__top-header-wrapper'>
               <div className="empty-block" ref={emptyBlockRef}></div>
               <TopHeader

@@ -111,7 +111,7 @@ function MainComponent() {
       {!error &&
         topHeaderTree.length !== 0 &&
         leftHeaderTree.length !== 0 &&
-        obtainedValuesForValuesArea.size !== 0 &&
+        obtainedValuesForValuesArea !== null &&
         Object.keys(queryParams).length !== 0 &&
 
         <DataTable
